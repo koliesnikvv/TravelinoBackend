@@ -25,12 +25,51 @@ SECRET_KEY = 'django-insecure-1m=kz%#3g-e6nbegk+gl7v=d)(skg1g4j3xwre6lxskb_%a!me
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+MIDDLEWARE = [
+       'corsheaders.middleware.CorsMiddleware',
+       'django.middleware.common.CommonMiddleware',
+
+   ]
+
+CORS_ALLOWED_ORIGINS = [
+       "http://localhost:3000",
+       "http://127.0.0.1:3000",
+   ]
+
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Application definition
+# Add these at the top of your settings.py
+import os
+from dotenv import load_dotenv
+from urllib.parse import urlparse, parse_qsl
+
+load_dotenv()
+
+# Replace the DATABASES section of your settings.py with this
+tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': tmpPostgres.path.replace('/', ''),
+        'USER': tmpPostgres.username,
+        'PASSWORD': tmpPostgres.password,
+        'HOST': tmpPostgres.hostname,
+        'PORT': 5432,
+        'OPTIONS': dict(parse_qsl(tmpPostgres.query)),
+    }
+}
 
 INSTALLED_APPS = [
+    'corsheaders',
+    'users',
+    'travellino',
+    'rest_framework_simplejwt',
+    'django_api_readme',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,6 +77,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -85,16 +125,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.users.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.users.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.users.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.users.password_validation.NumericPasswordValidator',
     },
 ]
 
