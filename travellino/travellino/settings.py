@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'users',
     'travellino',
     'catalog',
+    'trips',
     'rest_framework_simplejwt',
     'django_api_readme',
     'rest_framework',
