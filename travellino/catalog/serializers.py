@@ -2,6 +2,12 @@ from rest_framework import serializers
 from .models import City, Activity, TransportOption, AccommodationOption
 
 
+class CityShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = ['id', 'city']
+
+
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
@@ -24,7 +30,7 @@ class CitySerializer(serializers.ModelSerializer):
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
-        fields = ['id', 'city', 'title', 'description', 'category']
+        fields = ['id', 'title', 'description', 'category']
 
 
 class TransportOptionSerializer(serializers.ModelSerializer):
@@ -46,7 +52,6 @@ class AccommodationOptionSerializer(serializers.ModelSerializer):
         model = AccommodationOption
         fields = [
             'id',
-            'city',
             'name',
             'address',
             'rating',
