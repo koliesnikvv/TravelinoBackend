@@ -61,3 +61,22 @@ class TripActivity(models.Model):
 
     def __str__(self):
         return f"{self.activity.title} {self.scheduled_date}"
+
+class AccessLevel(models.TextChoices):
+    VIEW = 'View', 'View'
+    EDIT = 'Edit', 'Edit'
+
+class InviteStatus(models.TextChoices):
+    PENDING = 'Pending', 'Pending'
+    ACCEPTED = 'Accepted', 'Accepted'
+
+class TripParticipant(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='participants')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='participations')
+    invitee_email = models.EmailField()
+    access_level = models.CharField(max_length=10, choices=AccessLevel.choices)
+    status = models.CharField(max_length=10, choices=InviteStatus.choices, default=InviteStatus.PENDING)
+
+    def __str__(self):
+        return f"{self.invitee_email} - {self.trip.title}"

@@ -54,3 +54,9 @@ class TripActivitySerializer(serializers.ModelSerializer):
             'start_time',
             'end_time',
         ]
+
+class TripParticipantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TripParticipant
+        fields = ['id', 'trip', 'user', 'invitee_email', 'access_level', 'status']
+        read_only_fields = ['status']
