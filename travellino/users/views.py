@@ -62,36 +62,35 @@ class LoginView(APIView):
     permission_classes = []
     authentication_classes = []
 
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
 
-def post(self, request):
-    email = request.data.get('email')
-    password = request.data.get('password')
+        if not email or not password:
+            return Response({'error': 'Enter both email and password'}, status=status.HTTP_400_BAD_REQUEST)
 
-    if not email or not password:
-        return Response({'error': 'Enter both email and password'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
+            return Response({'error': 'User with this email does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
-    try:
-        user = CustomUser.objects.get(email=email)
-    except CustomUser.DoesNotExist:
-        return Response({'error': 'User with this email does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        user = authenticate(request, email=email, password=password)
 
-    user = authenticate(request, email=email, password=password)
+        if user is None:
+            return Response({'error': 'Invalid password or email'}, status=status.HTTP_401_UNAUTHORIZED)
 
-    if user is None:
-        return Response({'error': 'Invalid password or email'}, status=status.HTTP_401_UNAUTHORIZED)
+        if not user.is_email_verified:
+            return Response({'error': 'Email not verified'}, status=status.HTTP_403_FORBIDDEN)
 
-    if not user.is_email_verified:
-        return Response({'error': 'Email not verified'}, status=status.HTTP_403_FORBIDDEN)
-
-    refresh = RefreshToken.for_user(user)
-    return Response({
-        'access': str(refresh.access_token),
-        'refresh': str(refresh),
-        'user': {
-            'id': user.id,
-            'email': user.email,
-        }
-    })
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'user': {
+                'id': user.id,
+                'email': user.email,
+            }
+        })
 
 
 class LogoutView(APIView):
@@ -180,4 +179,4 @@ class ProfileView(APIView):
     def delete(self, request):
         user = request.user
         user.delete()
-        return Response({"message": "Account deleted"}, status=status.HTTP_200_)
+        return Response({"message": "Account deleted"}, status=status.HTTP_200_OK)
