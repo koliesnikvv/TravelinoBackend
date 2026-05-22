@@ -54,7 +54,7 @@ class AccommodationBooking(models.Model):
 class TripActivity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='activities')
-    activity = models.ForeignKey(Activity, on_delete=models.PROTECT, related_name='trip_activities')
+    activity = models.ForeignKey(Activity, on_delete=models.SET_NULL, null=True, blank=True, related_name='trip_activities')
     scheduled_date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
