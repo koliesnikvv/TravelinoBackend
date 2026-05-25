@@ -9,6 +9,9 @@ from django.db import models
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from django.contrib.postgres.fields import ArrayField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 logger = logging.getLogger(__name__)
 
@@ -79,4 +82,21 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.first_name
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name='profile'
+    )
+    photo = models.URLField(blank=True, null=True)
+    preferences = ArrayField(
+        base_field=models.CharField(max_length=100),
+        blank=True,
+        default=list
+    )
 
+@receiver(post_save, sender=CustomUser)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)

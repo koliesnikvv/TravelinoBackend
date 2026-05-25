@@ -4,6 +4,8 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from users.models import UserProfile
+
 CustomUser = get_user_model()
 
 
@@ -94,3 +96,24 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ['email', 'first_name', 'last_name', 'phone', 'is_email_verified', 'password']
         read_only_fields = ['is_email_verified', 'email']
+
+ALLOWED_PREFERENCES = ['beach', 'mountains', 'city'] #Add more preferences as needed
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['photo', 'preferences']
+
+    def validate_preferences(self, value):
+        invalid = [v for v in value if v not in ALLOWED_PREFERENCES]
+        if invalid:
+            raise serializers.ValidationError(f"Invalid preferences: {invalid}")
+        return value
+
+
+class UserWithProfileSerializer(serializers.ModelSerializer):
+    profile = UserProfileSerializer()
+
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'profile']
