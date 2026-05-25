@@ -1,66 +1,5 @@
 [
   {
-    "model": "auth.user",
-    "pk": 1,
-    "fields": {
-      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
-      "is_superuser": false,
-      "username": "valeria_client",
-      "email": "valeria@travelino.com",
-      "is_staff": false,
-      "is_active": true
-    }
-  },
-  {
-    "model": "auth.user",
-    "pk": 2,
-    "fields": {
-      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
-      "is_superuser": false,
-      "username": "john_traveler",
-      "email": "john@example.com",
-      "is_staff": false,
-      "is_active": true
-    }
-  },
-  {
-    "model": "auth.user",
-    "pk": 3,
-    "fields": {
-      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
-      "is_superuser": false,
-      "username": "alex_explorer",
-      "email": "alex@example.com",
-      "is_staff": false,
-      "is_active": true
-    }
-  },
-  {
-    "model": "auth.user",
-    "pk": 4,
-    "fields": {
-      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
-      "is_superuser": false,
-      "username": "sophie_w",
-      "email": "sophie@example.com",
-      "is_staff": false,
-      "is_active": true
-    }
-  },
-  {
-    "model": "auth.user",
-    "pk": 5,
-    "fields": {
-      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
-      "is_superuser": false,
-      "username": "marco_b",
-      "email": "marco@example.com",
-      "is_staff": false,
-      "is_active": true
-    }
-  },
-
-  {
     "model": "trips.trip",
     "pk": "e1b2c3d4-0005-0000-0000-000000000001",
     "fields": {
@@ -179,7 +118,7 @@
 
   {
     "model": "trips.accommodationbooking",
-    "pk": "g1b2c3d4-0007-0000-0000-000000000001",
+    "pk": "f1b2c3d4-0007-0000-0000-000000000001",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000001",
       "accommodation_name": "Hotel Le Marais",
@@ -193,7 +132,7 @@
   },
   {
     "model": "trips.accommodationbooking",
-    "pk": "g1b2c3d4-0007-0000-0000-000000000002",
+    "pk": "f1b2c3d4-0007-0000-0000-000000000002",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000002",
       "accommodation_name": "Hotel Ukraine",
@@ -207,7 +146,7 @@
   },
   {
     "model": "trips.accommodationbooking",
-    "pk": "g1b2c3d4-0007-0000-0000-000000000003",
+    "pk": "f1b2c3d4-0007-0000-0000-000000000003",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000003",
       "accommodation_name": "Barcelo Raval",
@@ -221,7 +160,7 @@
   },
   {
     "model": "trips.accommodationbooking",
-    "pk": "g1b2c3d4-0007-0000-0000-000000000004",
+    "pk": "f1b2c3d4-0007-0000-0000-000000000004",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000004",
       "accommodation_name": "Reykjavik Konsulat Hotel",
@@ -235,7 +174,7 @@
   },
   {
     "model": "trips.accommodationbooking",
-    "pk": "g1b2c3d4-0007-0000-0000-000000000005",
+    "pk": "f1b2c3d4-0007-0000-0000-000000000005",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000005",
       "accommodation_name": "Lub d Bangkok Silom",
@@ -250,7 +189,7 @@
 
   {
     "model": "trips.tripactivity",
-    "pk": "h1b2c3d4-0008-0000-0000-000000000001",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000001",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000001",
       "activity": "b1b2c3d4-0002-0000-0000-000000000001",
@@ -261,7 +200,7 @@
   },
   {
     "model": "trips.tripactivity",
-    "pk": "h1b2c3d4-0008-0000-0000-000000000002",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000002",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000001",
       "activity": "b1b2c3d4-0002-0000-0000-000000000002",
@@ -272,7 +211,7 @@
   },
   {
     "model": "trips.tripactivity",
-    "pk": "h1b2c3d4-0008-0000-0000-000000000003",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000003",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000002",
       "activity": "b1b2c3d4-0002-0000-0000-000000000003",
@@ -283,7 +222,7 @@
   },
   {
     "model": "trips.tripactivity",
-    "pk": "h1b2c3d4-0008-0000-0000-000000000004",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000004",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000003",
       "activity": "b1b2c3d4-0002-0000-0000-000000000006",
@@ -294,7 +233,7 @@
   },
   {
     "model": "trips.tripactivity",
-    "pk": "h1b2c3d4-0008-0000-0000-000000000005",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000005",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000004",
       "activity": "b1b2c3d4-0002-0000-0000-000000000007",
@@ -305,7 +244,7 @@
   },
   {
     "model": "trips.tripactivity",
-    "pk": "h1b2c3d4-0008-0000-0000-000000000006",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000006",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000005",
       "activity": "b1b2c3d4-0002-0000-0000-000000000008",
@@ -316,7 +255,7 @@
   },
   {
     "model": "trips.tripactivity",
-    "pk": "h1b2c3d4-0008-0000-0000-000000000007",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000007",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000005",
       "activity": "b1b2c3d4-0002-0000-0000-000000000009",
@@ -328,7 +267,7 @@
 
   {
     "model": "trips.tripparticipant",
-    "pk": "i1b2c3d4-0009-0000-0000-000000000001",
+    "pk": "f1b2c3d4-0009-0000-0000-000000000001",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000001",
       "user": 2,
@@ -339,7 +278,7 @@
   },
   {
     "model": "trips.tripparticipant",
-    "pk": "i1b2c3d4-0009-0000-0000-000000000002",
+    "pk": "f1b2c3d4-0009-0000-0000-000000000002",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000001",
       "user": null,
@@ -350,7 +289,7 @@
   },
   {
     "model": "trips.tripparticipant",
-    "pk": "i1b2c3d4-0009-0000-0000-000000000003",
+    "pk": "f1b2c3d4-0009-0000-0000-000000000003",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000003",
       "user": 1,
@@ -361,7 +300,7 @@
   },
   {
     "model": "trips.tripparticipant",
-    "pk": "i1b2c3d4-0009-0000-0000-000000000004",
+    "pk": "f1b2c3d4-0009-0000-0000-000000000004",
     "fields": {
       "trip": "e1b2c3d4-0005-0000-0000-000000000004",
       "user": 5,

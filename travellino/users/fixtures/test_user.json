@@ -1,0 +1,126 @@
+[
+  {
+    "model": "users.customuser",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
+      "is_superuser": false,
+      "username": "valeria_client",
+      "email": "valeria@travelino.com",
+      "phone": "+380671112233",
+      "first_name": "Valeria",
+      "last_name": "Traveler",
+      "is_staff": false,
+      "is_active": true,
+      "is_email_verified": true
+    }
+  },
+  {
+    "model": "users.userprofile",
+    "pk": 1,
+    "fields": {
+      "photo": null,
+      "preferences": ["museums", "coffee", "architecture"]
+    }
+  },
+
+  {
+    "model": "users.customuser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
+      "is_superuser": false,
+      "username": "john_traveler",
+      "email": "john@example.com",
+      "phone": "+380504445566",
+      "first_name": "John",
+      "last_name": "Doe",
+      "is_staff": false,
+      "is_active": true,
+      "is_email_verified": true
+    }
+  },
+  {
+    "model": "users.userprofile",
+    "pk": 2,
+    "fields": {
+      "photo": null,
+      "preferences": ["beaches", "surfing", "seafood"]
+    }
+  },
+
+  {
+    "model": "users.customuser",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
+      "is_superuser": false,
+      "username": "alex_explorer",
+      "email": "alex@example.com",
+      "phone": "+380637778899",
+      "first_name": "Alex",
+      "last_name": "Smith",
+      "is_staff": false,
+      "is_active": true,
+      "is_email_verified": true
+    }
+  },
+  {
+    "model": "users.userprofile",
+    "pk": 3,
+    "fields": {
+      "photo": null,
+      "preferences": ["hiking", "mountains", "nature"]
+    }
+  },
+
+  {
+    "model": "users.customuser",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
+      "is_superuser": false,
+      "username": "sophie_w",
+      "email": "sophie@example.com",
+      "phone": "+380971114477",
+      "first_name": "Sophie",
+      "last_name": "Wilson",
+      "is_staff": false,
+      "is_active": true,
+      "is_email_verified": true
+    }
+  },
+  {
+    "model": "users.userprofile",
+    "pk": 4,
+    "fields": {
+      "photo": null,
+      "preferences": ["asia", "street-food", "shopping"]
+    }
+  },
+
+  {
+    "model": "users.customuser",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
+      "is_superuser": false,
+      "username": "marco_b",
+      "email": "marco@example.com",
+      "phone": "+380935552288",
+      "first_name": "Marco",
+      "last_name": "Rossi",
+      "is_staff": false,
+      "is_active": true,
+      "is_email_verified": true
+    }
+  },
+  {
+    "model": "users.userprofile",
+    "pk": 5,
+    "fields": {
+      "photo": null,
+      "preferences": ["history", "photography"]
+    }
+  }
+]
