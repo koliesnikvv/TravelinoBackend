@@ -1,0 +1,329 @@
+[
+  {
+    "model": "catalog.city",
+    "pk": "a1b2c3d4-0001-0000-0000-000000000001",
+    "fields": {
+      "city": "Paris",
+      "country": "France",
+      "region": "Western Europe",
+      "short_description": "Capital of France, known for art, architecture and cuisine.",
+      "ideal_durations": ["Short trip", "One week"],
+      "budget_level": "Luxury",
+      "culture": 5,
+      "adventure": 2,
+      "nature": 4,
+      "beaches": 1,
+      "nightlife": 5,
+      "cuisine": 5,
+      "wellness": 3,
+      "urban": 5,
+      "seclusion": 1
+    }
+  },
+  {
+    "model": "catalog.city",
+    "pk": "a1b2c3d4-0001-0000-0000-000000000002",
+    "fields": {
+      "city": "Kyiv",
+      "country": "Ukraine",
+      "region": "Eastern Europe",
+      "short_description": "Capital of Ukraine, city with rich history and architecture.",
+      "ideal_durations": ["Weekend", "Short trip"],
+      "budget_level": "Budget",
+      "culture": 4,
+      "adventure": 3,
+      "nature": 5,
+      "beaches": 1,
+      "nightlife": 4,
+      "cuisine": 4,
+      "wellness": 3,
+      "urban": 4,
+      "seclusion": 2
+    }
+  },
+  {
+    "model": "catalog.city",
+    "pk": "a1b2c3d4-0001-0000-0000-000000000003",
+    "fields": {
+      "city": "Barcelona",
+      "country": "Spain",
+      "region": "Southern Europe",
+      "short_description": "Coastal city known for Gaudi architecture, beaches and nightlife.",
+      "ideal_durations": ["Short trip", "One week"],
+      "budget_level": "Mid-range",
+      "culture": 4,
+      "adventure": 4,
+      "nature": 4,
+      "beaches": 5,
+      "nightlife": 5,
+      "cuisine": 4,
+      "wellness": 3,
+      "urban": 5,
+      "seclusion": 1
+    }
+  },
+  {
+    "model": "catalog.city",
+    "pk": "a1b2c3d4-0001-0000-0000-000000000004",
+    "fields": {
+      "city": "Reykjavik",
+      "country": "Iceland",
+      "region": "Northern Europe",
+      "short_description": "Capital of Iceland, base for northern lights and nature trips.",
+      "ideal_durations": ["Weekend", "Short trip", "One week"],
+      "budget_level": "Luxury",
+      "culture": 3,
+      "adventure": 5,
+      "nature": 5,
+      "beaches": 2,
+      "nightlife": 3,
+      "cuisine": 3,
+      "wellness": 4,
+      "urban": 2,
+      "seclusion": 5
+    }
+  },
+  {
+    "model": "catalog.city",
+    "pk": "a1b2c3d4-0001-0000-0000-000000000005",
+    "fields": {
+      "city": "Bangkok",
+      "country": "Thailand",
+      "region": "Southeast Asia",
+      "short_description": "Capital of Thailand with temples, street food and vibrant nightlife.",
+      "ideal_durations": ["Short trip", "One week", "Long trip"],
+      "budget_level": "Budget",
+      "culture": 4,
+      "adventure": 4,
+      "nature": 3,
+      "beaches": 3,
+      "nightlife": 5,
+      "cuisine": 5,
+      "wellness": 4,
+      "urban": 5,
+      "seclusion": 1
+    }
+  },
+  {
+    "model": "catalog.activity",
+    "pk": "b1b2c3d4-0002-0000-0000-000000000001",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000001",
+      "title": "Louvre Museum",
+      "description": "World's largest art museum with over 35,000 works including the Mona Lisa.",
+      "category": "Culture"
+    }
+  },
+  {
+    "model": "catalog.activity",
+    "pk": "b1b2c3d4-0002-0000-0000-000000000002",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000001",
+      "title": "Eiffel Tower",
+      "description": "Iconic iron tower built in 1889, offers views of the city from three levels.",
+      "category": "Culture"
+    }
+  },
+  {
+    "model": "catalog.activity",
+    "pk": "b1b2c3d4-0002-0000-0000-000000000003",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000002",
+      "title": "Kyiv Pechersk Lavra",
+      "description": "Historic Orthodox Christian monastery complex founded in 1051.",
+      "category": "Culture"
+    }
+  },
+  {
+    "model": "catalog.activity",
+    "pk": "b1b2c3d4-0002-0000-0000-000000000004",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000002",
+      "title": "Holosiivskyi Forest",
+      "description": "Large urban forest park in the south of Kyiv, good for walks and cycling.",
+      "category": "Nature"
+    }
+  },
+  {
+    "model": "catalog.activity",
+    "pk": "b1b2c3d4-0002-0000-0000-000000000005",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000003",
+      "title": "Sagrada Familia",
+      "description": "Gaudi's unfinished basilica, under construction since 1882.",
+      "category": "Culture"
+    }
+  },
+  {
+    "model": "catalog.activity",
+    "pk": "b1b2c3d4-0002-0000-0000-000000000006",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000003",
+      "title": "Barceloneta Beach",
+      "description": "Main city beach in Barcelona, 1.1 km long, located next to the old port.",
+      "category": "Beaches"
+    }
+  },
+  {
+    "model": "catalog.activity",
+    "pk": "b1b2c3d4-0002-0000-0000-000000000007",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000004",
+      "title": "Northern Lights Tour",
+      "description": "Guided evening tour outside Reykjavik to observe aurora borealis.",
+      "category": "Nature"
+    }
+  },
+  {
+    "model": "catalog.activity",
+    "pk": "b1b2c3d4-0002-0000-0000-000000000008",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000005",
+      "title": "Wat Phra Kaew",
+      "description": "Temple of the Emerald Buddha, the most sacred Buddhist temple in Thailand.",
+      "category": "Culture"
+    }
+  },
+  {
+    "model": "catalog.activity",
+    "pk": "b1b2c3d4-0002-0000-0000-000000000009",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000005",
+      "title": "Chatuchak Weekend Market",
+      "description": "One of the world's largest markets with over 8,000 stalls.",
+      "category": "Cuisine"
+    }
+  },
+  {
+    "model": "catalog.transportoption",
+    "pk": "c1b2c3d4-0003-0000-0000-000000000001",
+    "fields": {
+      "departure_point": "Kyiv",
+      "arrival_point": "Paris",
+      "transport_type": "Flight",
+      "carrier_name": "Air France",
+      "route_number": "AF1251",
+      "base_price": "210.00"
+    }
+  },
+  {
+    "model": "catalog.transportoption",
+    "pk": "c1b2c3d4-0003-0000-0000-000000000002",
+    "fields": {
+      "departure_point": "Kyiv",
+      "arrival_point": "Barcelona",
+      "transport_type": "Flight",
+      "carrier_name": "Vueling",
+      "route_number": "VY6140",
+      "base_price": "180.00"
+    }
+  },
+  {
+    "model": "catalog.transportoption",
+    "pk": "c1b2c3d4-0003-0000-0000-000000000003",
+    "fields": {
+      "departure_point": "Paris",
+      "arrival_point": "Barcelona",
+      "transport_type": "Train",
+      "carrier_name": "SNCF",
+      "route_number": "TGV9731",
+      "base_price": "65.00"
+    }
+  },
+  {
+    "model": "catalog.transportoption",
+    "pk": "c1b2c3d4-0003-0000-0000-000000000004",
+    "fields": {
+      "departure_point": "Kyiv",
+      "arrival_point": "Reykjavik",
+      "transport_type": "Flight",
+      "carrier_name": "Icelandair",
+      "route_number": "FI302",
+      "base_price": "390.00"
+    }
+  },
+  {
+    "model": "catalog.transportoption",
+    "pk": "c1b2c3d4-0003-0000-0000-000000000005",
+    "fields": {
+      "departure_point": "Kyiv",
+      "arrival_point": "Bangkok",
+      "transport_type": "Flight",
+      "carrier_name": "Thai Airways",
+      "route_number": "TG972",
+      "base_price": "520.00"
+    }
+  },
+  {
+    "model": "catalog.accommodationoption",
+    "pk": "d1b2c3d4-0004-0000-0000-000000000001",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000001",
+      "name": "Hotel Le Marais",
+      "address": "12 Rue de Bretagne, Paris",
+      "rating": "4.3",
+      "description": "Boutique hotel in the historic Marais district, 10 min walk from the Louvre.",
+      "price_per_night": "145.00"
+    }
+  },
+  {
+    "model": "catalog.accommodationoption",
+    "pk": "d1b2c3d4-0004-0000-0000-000000000002",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000001",
+      "name": "Paris Budget Hostel",
+      "address": "45 Rue de la Roquette, Paris",
+      "rating": "3.8",
+      "description": "Budget hostel in the 11th arrondissement with private and shared rooms.",
+      "price_per_night": "38.00"
+    }
+  },
+  {
+    "model": "catalog.accommodationoption",
+    "pk": "d1b2c3d4-0004-0000-0000-000000000003",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000002",
+      "name": "Hotel Ukraine",
+      "address": "4 Instytutska St, Kyiv",
+      "rating": "4.1",
+      "description": "Central hotel on Maidan Nezalezhnosti with views of the city center.",
+      "price_per_night": "75.00"
+    }
+  },
+  {
+    "model": "catalog.accommodationoption",
+    "pk": "d1b2c3d4-0004-0000-0000-000000000004",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000003",
+      "name": "Barcelo Raval",
+      "address": "Rambla del Raval 17-21, Barcelona",
+      "rating": "4.4",
+      "description": "Design hotel in El Raval with rooftop terrace and city views.",
+      "price_per_night": "130.00"
+    }
+  },
+  {
+    "model": "catalog.accommodationoption",
+    "pk": "d1b2c3d4-0004-0000-0000-000000000005",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000004",
+      "name": "Reykjavik Konsulat Hotel",
+      "address": "Túngata 6, Reykjavik",
+      "rating": "4.6",
+      "description": "Upscale hotel in the city center, walking distance from the harbor.",
+      "price_per_night": "280.00"
+    }
+  },
+  {
+    "model": "catalog.accommodationoption",
+    "pk": "d1b2c3d4-0004-0000-0000-000000000005",
+    "fields": {
+      "city": "a1b2c3d4-0001-0000-0000-000000000005",
+      "name": "Lub d Bangkok Silom",
+      "address": "4 Decho Road, Silom, Bangkok",
+      "rating": "4.2",
+      "description": "Modern hostel and hotel hybrid in the Silom business and nightlife district.",
+      "price_per_night": "28.00"
+    }
+  }
+]

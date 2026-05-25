@@ -3,5 +3,5 @@ Django==6.0.5
 djangorestframework==3.17.1
 sqlparse==0.5.5
 djangorestframework_simplejwt==5.5.1
-
+pandas==3.0.3
 

@@ -4,28 +4,30 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 
-# NOTE: temporary values for testing, update after extracting unique values from dataset
 class BudgetLevel(models.TextChoices):
     BUDGET = 'Budget', 'Budget'
     MID_RANGE = 'Mid-range', 'Mid-range'
     LUXURY = 'Luxury', 'Luxury'
 
 
-# NOTE: temporary values for testing, update after extracting unique values from dataset
 class IdealDuration(models.TextChoices):
+    DAY_TRIP = 'Day trip', 'Day trip'
     WEEKEND = 'Weekend', 'Weekend'
     SHORT_TRIP = 'Short trip', 'Short trip'
     ONE_WEEK = 'One week', 'One week'
     LONG_TRIP = 'Long trip', 'Long trip'
 
 
-# NOTE: temporary values for testing, update after finalizing category list
 class ActivityCategory(models.TextChoices):
     CULTURE = 'Culture', 'Culture'
+    ADVENTURE = 'Adventure', 'Adventure'
     NATURE = 'Nature', 'Nature'
     BEACHES = 'Beaches', 'Beaches'
     NIGHTLIFE = 'Nightlife', 'Nightlife'
     CUISINE = 'Cuisine', 'Cuisine'
+    WELLNESS = 'Wellness', 'Wellness'
+    URBAN = 'Urban', 'Urban'
+    SECLUSION = 'Seclusion', 'Seclusion'
 
 
 class TransportType(models.TextChoices):
@@ -47,18 +49,22 @@ class City(models.Model):
     )
     budget_level = models.CharField(max_length=20, choices=BudgetLevel.choices)
 
-    culture = models.DecimalField(max_digits=3, decimal_places=1)
-    nature = models.DecimalField(max_digits=3, decimal_places=1)
-    beaches = models.DecimalField(max_digits=3, decimal_places=1)
-    nightlife = models.DecimalField(max_digits=3, decimal_places=1)
-    cuisine = models.DecimalField(max_digits=3, decimal_places=1)
+    culture = models.IntegerField()
+    adventure = models.IntegerField()
+    nature = models.IntegerField()
+    beaches = models.IntegerField()
+    nightlife = models.IntegerField()
+    cuisine = models.IntegerField()
+    wellness = models.IntegerField()
+    urban = models.IntegerField()
+    seclusion = models.IntegerField()
 
     # reserve: for transport and accommodation API integration
-    # latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    # longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    # latitude = models.DecimalField(max_digits=19, decimal_places=16)
+    # longitude = models.DecimalField(max_digits=19, decimal_places=16)
 
     # reserve: for city detail page
-    # avg_temp_monthly = models.JSONField(null=True, blank=True)
+    # avg_temp_monthly = models.JSONField()
 
     def __str__(self):
         return self.city
