@@ -1,9 +1,12 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from .serializers import CustomTokenObtainPairView
-from .views import RegisterView, LoginView, LogoutView, ProtectedAPIView, VerifyEmailView, ForgotPasswordView, \
-    ResetPasswordView, ProfileView
+from .views import (
+    RegisterView, LoginView, LogoutView, ProtectedAPIView,
+    VerifyEmailView, ForgotPasswordView, ResetPasswordView,
+    ProfileView, CustomTokenObtainPairView, ChangePasswordView,
+    UserPreferencesView, PreferencesOptionsView
+)
 
 app_name = 'users'
 
@@ -15,10 +18,10 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('protected/', ProtectedAPIView.as_view(), name='protected'),
     path('verify-email/<uidb64>/<token>/', VerifyEmailView.as_view(), name='verify-email'),
-    path('email-confirmed/', VerifyEmailView.as_view(), name='email-confirme'),
-    path('email-error/', VerifyEmailView.as_view(), name='email-error'),
     path('forgot-password/', ForgotPasswordView.as_view(), name='forgot-password'),
     path('reset-password/<uid>/<token>/', ResetPasswordView.as_view(), name='reset-password'),
     path('profile/', ProfileView.as_view(), name='profile'),
-
+    path('profile/change-password/', ChangePasswordView.as_view(), name='change-password'),
+    path('profile/preferences/', UserPreferencesView.as_view(), name='preferences'),
+    path('profile/preferences/options/', PreferencesOptionsView.as_view(), name='preferences-options'),
 ]

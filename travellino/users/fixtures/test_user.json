@@ -3,7 +3,7 @@
     "model": "users.customuser",
     "pk": 1,
     "fields": {
-      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
+      "password": "pbkdf2_sha256$1200000$WBDD9usOJhCx5wS33MLOeN$mkegByglBSUbhimancgBBn1lSyyRYnd/dE5ObcgZVoU=",
       "is_superuser": false,
       "username": "valeria_client",
       "email": "valeria@travelino.com",
@@ -28,7 +28,7 @@
     "model": "users.customuser",
     "pk": 2,
     "fields": {
-      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
+      "password": "pbkdf2_sha256$1200000$WBDD9usOJhCx5wS33MLOeN$mkegByglBSUbhimancgBBn1lSyyRYnd/dE5ObcgZVoU=",
       "is_superuser": false,
       "username": "john_traveler",
       "email": "john@example.com",
@@ -53,7 +53,7 @@
     "model": "users.customuser",
     "pk": 3,
     "fields": {
-      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
+      "password": "pbkdf2_sha256$1200000$WBDD9usOJhCx5wS33MLOeN$mkegByglBSUbhimancgBBn1lSyyRYnd/dE5ObcgZVoU=",
       "is_superuser": false,
       "username": "alex_explorer",
       "email": "alex@example.com",
@@ -78,7 +78,7 @@
     "model": "users.customuser",
     "pk": 4,
     "fields": {
-      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
+      "password": "pbkdf2_sha256$1200000$WBDD9usOJhCx5wS33MLOeN$mkegByglBSUbhimancgBBn1lSyyRYnd/dE5ObcgZVoU=",
       "is_superuser": false,
       "username": "sophie_w",
       "email": "sophie@example.com",
@@ -103,7 +103,7 @@
     "model": "users.customuser",
     "pk": 5,
     "fields": {
-      "password": "pbkdf2_sha256$1200000$5yWPWR4mr3qxQ9vxbQ6BRT$PAMF9tpgR/yWmLLhpJEzBMh8SaKuemkySiG4iFugCcc=",
+      "password": "pbkdf2_sha256$1200000$WBDD9usOJhCx5wS33MLOeN$mkegByglBSUbhimancgBBn1lSyyRYnd/dE5ObcgZVoU=",
       "is_superuser": false,
       "username": "marco_b",
       "email": "marco@example.com",
