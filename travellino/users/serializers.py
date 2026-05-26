@@ -89,8 +89,15 @@ class ProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ['is_email_verified', 'email']
 
 
-ALLOWED_PREFERENCES = ['beach', 'mountains', 'city']
-
+#test only
+ALLOWED_PREFERENCES = [
+    'museums', 'coffee', 'architecture',
+    'beaches', 'surfing', 'seafood',
+    'hiking', 'mountains', 'nature',
+    'asia', 'street-food', 'shopping',
+    'history', 'photography',
+    'city', 'beach',
+]
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
