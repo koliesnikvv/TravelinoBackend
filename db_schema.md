@@ -34,13 +34,13 @@ Auth model. Extends Django `AbstractUser`. Used by Django auth system, JWT, `req
 ---
 
 ### UserProfile
-Separate table for non-auth user data. Created separately from CustomUser.
+Separate table for non-auth user data. Created automatically via `post_save` signal when `CustomUser` is created.
 
 | Field | Type | Notes |
 |---|---|---|
 | user | OneToOneField → CustomUser | primary key, cascade delete |
 | photo | URLField | nullable, link to object storage |
-| preferences | ArrayField(CharField) | array of preference tags |
+| preferences | ArrayField(CharField) | array of preference tags, any string, max 100 chars |
 
 > **TODO:** `preferences` currently accepts any string. After finalizing the tag list — add `TextChoices` enum and `choices` validation, then migrate.
 
@@ -59,16 +59,17 @@ Reference data. Not user-specific. Populated from dataset, not via API.
 | country | CharField | |
 | region | CharField | |
 | short_description | TextField | |
-| ideal_durations | ArrayField(CharField) | array of duration tags |
+| ideal_durations | ArrayField(CharField) | choices: Day trip, Weekend, Short trip, One week, Long trip |
 | budget_level | CharField | choices: Budget, Mid-range, Luxury |
-| culture | DecimalField(3,1) | rating 0—5 |
-| nature | DecimalField(3,1) | rating 0—5 |
-| beaches | DecimalField(3,1) | rating 0—5 |
-| nightlife | DecimalField(3,1) | rating 0—5 |
-| cuisine | DecimalField(3,1) | rating 0—5 |
-
-> **TODO:** `BudgetLevel` and `IdealDuration` enums contain temporary values for testing.
-> Extract unique values from dataset and update before production.
+| culture | IntegerField | rating score |
+| adventure | IntegerField | rating score |
+| nature | IntegerField | rating score |
+| beaches | IntegerField | rating score |
+| nightlife | IntegerField | rating score |
+| cuisine | IntegerField | rating score |
+| wellness | IntegerField | rating score |
+| urban | IntegerField | rating score |
+| seclusion | IntegerField | rating score |
 
 > **Reserve fields (commented out, not in DB):**
 > - `latitude`, `longitude` — for future transport/accommodation API integration
@@ -85,10 +86,7 @@ Reference catalog of places and activities per city.
 | city | ForeignKey → City | cascade delete |
 | title | CharField | |
 | description | TextField | |
-| category | CharField | choices: Culture, Nature, Beaches, Nightlife, Cuisine |
-
-> **TODO:** `ActivityCategory` enum contains temporary values.
-> Finalize category list and migrate.
+| category | CharField | choices: Culture, Adventure, Nature, Beaches, Nightlife, Cuisine, Wellness, Urban, Seclusion |
 
 ---
 
@@ -104,8 +102,6 @@ Reference transport routes. Used for testing and as cache for external API resul
 | carrier_name | CharField | e.g. Ryanair |
 | route_number | CharField | flight or train number |
 | base_price | DecimalField(10,2) | price per person |
-
-> **TODO:** `TransportType` enum — verify all required values against dataset.
 
 ---
 
@@ -191,7 +187,6 @@ Scheduled activity within a trip. Used for calendar planning and .ics export.
 | id | UUIDField | primary key |
 | trip | ForeignKey → Trip | cascade delete |
 | activity | ForeignKey → Activity | nullable, SET_NULL — for test data |
-| activity_details_id | CharField | nullable, external API id — for production |
 | scheduled_date | DateField | specific date within trip |
 | start_time | TimeField | required for calendar grid |
 | end_time | TimeField | |
@@ -219,6 +214,7 @@ Tracks invitations and access rights for shared trips.
 
 - All custom model primary keys are `UUIDField`. `CustomUser` uses default Django `BigAutoField`.
 - `ArrayField` is PostgreSQL-specific. Requires `django.contrib.postgres` in `INSTALLED_APPS`.
-- All enums marked **TODO** contain temporary values and must be updated before production data load.
+- `UserProfile` is created automatically via `post_save` signal on `CustomUser` creation.
+- `preferences` in `UserProfile` currently accepts any string. **TODO:** finalize tag list, add `TextChoices`, migrate.
 - Reserved fields in `City` are commented out in code and not present in DB. Uncomment and migrate when needed.
-- No service layer or endpoints are implemented yet. Data layer only.
+- No service layer or endpoints are implemented yet for `catalog` and `trips`. Data layer only.
