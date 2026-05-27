@@ -16,13 +16,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from users.models import UserProfile
 from users.serializers import RegisterSerializer, CustomUser, ProfileSerializer, CustomTokenObtainPairSerializer, UserProfileSerializer
 from .utils import send_password_reset_email, validate_password_strength
+from users.serializers import ALLOWED_PREFERENCES
 
 logger = logging.getLogger('users')
 
 User = get_user_model()
-
-ALLOWED_PREFERENCES = ['beach', 'mountains', 'city']
-
 
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
