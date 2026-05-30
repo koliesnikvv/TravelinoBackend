@@ -5,7 +5,7 @@ from .models import City, Activity, TransportOption, AccommodationOption
 class CityShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = City
-        fields = ['id', 'city']
+        fields = ['id', 'city', 'country']
 
 
 class CitySerializer(serializers.ModelSerializer):
@@ -20,17 +20,21 @@ class CitySerializer(serializers.ModelSerializer):
             'ideal_durations',
             'budget_level',
             'culture',
+            'adventure',
             'nature',
             'beaches',
             'nightlife',
             'cuisine',
+            'wellness',
+            'urban',
+            'seclusion',
         ]
 
 
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
-        fields = ['id', 'title', 'description', 'category']
+        fields = ['id', 'city', 'title', 'description', 'category']
 
 
 class TransportOptionSerializer(serializers.ModelSerializer):
@@ -52,6 +56,7 @@ class AccommodationOptionSerializer(serializers.ModelSerializer):
         model = AccommodationOption
         fields = [
             'id',
+            'city',
             'name',
             'address',
             'rating',
