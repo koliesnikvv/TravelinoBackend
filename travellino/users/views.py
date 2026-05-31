@@ -5,20 +5,22 @@ from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import redirect
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
+from django.db import transaction
 from rest_framework import permissions, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-from users.serializers import RegisterSerializer, CustomUser, ProfileSerializer
-from .utils import send_password_reset_email
+from users.models import UserProfile
+from users.serializers import RegisterSerializer, CustomUser, ProfileSerializer, CustomTokenObtainPairSerializer, UserProfileSerializer
+from .utils import send_password_reset_email, validate_password_strength
+from users.serializers import ALLOWED_PREFERENCES
 
 logger = logging.getLogger('users')
 
 User = get_user_model()
-
-
 
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -27,13 +29,18 @@ class RegisterView(APIView):
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
-            user.send_verification_email(request)
+            try:
+                with transaction.atomic():
+                    user = serializer.save()
+                    user.send_verification_email(request)
+            except Exception as e:
+                logger.error(f"Registration failed: {e}")
+                return Response(
+                    {'error': 'Registration failed. Please try again.'},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
             return Response(
-                {
-                    'user': RegisterSerializer(user).data,
-                    'message': 'User registered successfully'
-                },
+                {'message': 'Registration successful. Please check your email to verify your account.'},
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -47,15 +54,15 @@ class VerifyEmailView(APIView):
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except (User.DoesNotExist, ValueError, TypeError, OverflowError):
-            return redirect("http://localhost:5173/email-error")
+            return redirect("http://localhost:3000/email-error")
 
         if default_token_generator.check_token(user, token):
             user.is_email_verified = True
             user.is_active = True
             user.save()
-            return redirect("http://localhost:5173/email-confirmed")
+            return redirect("http://localhost:3000/email-confirmed")
         else:
-            return redirect("http://localhost:5173/email-error")
+            return redirect("http://localhost:3000/email-error")
 
 
 class LoginView(APIView):
@@ -69,15 +76,10 @@ class LoginView(APIView):
         if not email or not password:
             return Response({'error': 'Enter both email and password'}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            user = CustomUser.objects.get(email=email)
-        except CustomUser.DoesNotExist:
-            return Response({'error': 'User with this email does not exist'}, status=status.HTTP_404_NOT_FOUND)
-
         user = authenticate(request, email=email, password=password)
 
         if user is None:
-            return Response({'error': 'Invalid password or email'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Invalid email or password'}, status=status.HTTP_401_UNAUTHORIZED)
 
         if not user.is_email_verified:
             return Response({'error': 'Email not verified'}, status=status.HTTP_403_FORBIDDEN)
@@ -94,7 +96,7 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         logger.info("Logout attempt received")
@@ -126,36 +128,41 @@ class ForgotPasswordView(APIView):
         try:
             user = User.objects.get(email=email)
             send_password_reset_email(user)
-            return Response({'message': 'Check your email for reset link.'})
         except User.DoesNotExist:
-            return Response({'error': 'User with this email does not exist.'}, status=404)
+            pass
+        return Response({'message': 'If this email is registered, you will receive a reset link.'})
 
 
 class ResetPasswordView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, uid, token):
-
         new_password = request.data.get('new_password')
 
         if not new_password:
             return Response({'error': 'New password is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        error = validate_password_strength(new_password)
+        if error:
+            return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             uid = force_str(urlsafe_base64_decode(uid))
             user = User.objects.get(pk=uid)
-
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-                return Response({'error': 'Invalid reset link.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Invalid reset link.'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not default_token_generator.check_token(user, token):
-           return Response({'error': 'Invalid or expired token.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Invalid or expired token.'}, status=status.HTTP_400_BAD_REQUEST)
 
         user.set_password(new_password)
         user.save()
 
         return Response({'message': 'Password reset successful.'}, status=status.HTTP_200_OK)
 
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 class ProfileView(APIView):
@@ -168,15 +175,77 @@ class ProfileView(APIView):
     def put(self, request):
         serializer = ProfileSerializer(request.user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        new_password = serializer.validated_data.pop('password', None)
-        user = serializer.instance
-        if new_password:
-            user.set_password(new_password)
-            user.save()
         serializer.save()
-        return Response(ProfileSerializer(user).data)
+        return Response(ProfileSerializer(request.user).data)
 
     def delete(self, request):
-        user = request.user
-        user.delete()
+        password = request.data.get('password')
+        if not password:
+            return Response(
+                {'error': 'Password is required to delete account.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if not request.user.check_password(password):
+            return Response(
+                {'error': 'Invalid password.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        request.user.delete()
         return Response({"message": "Account deleted"}, status=status.HTTP_200_OK)
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
+
+        if not current_password or not new_password:
+            return Response(
+                {'error': 'Both current and new password are required.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not request.user.check_password(current_password):
+            return Response(
+                {'error': 'Current password is incorrect.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        error = validate_password_strength(new_password)
+        if error:
+            return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
+
+        if current_password == new_password:
+            return Response(
+                {'error': 'New password must be different from current password.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        request.user.set_password(new_password)
+        request.user.save()
+        return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
+
+
+class UserPreferencesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = UserProfile.objects.get(user=request.user)
+        serializer = UserProfileSerializer(profile)
+        return Response(serializer.data)
+
+    def put(self, request):
+        profile = UserProfile.objects.get(user=request.user)
+        serializer = UserProfileSerializer(profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
+class PreferencesOptionsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({'preferences': ALLOWED_PREFERENCES})

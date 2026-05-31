@@ -19,49 +19,49 @@ phone_validator = RegexValidator(
     regex=r'^\+380\d{9}$',
     message="Phone should start with +380 and contain 9 more digits."
 )
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def create_user(self, email, phone, password=None, **extra_fields):
+    def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError("The Email must be set")
         email = self.normalize_email(email)
-        user = self.model(email=email, phone=phone, **extra_fields)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, phone, password, **extra_fields):
+    def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, phone, password, **extra_fields)
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_email_verified', True)
+        return self.create_user(email, password, **extra_fields)
+
 
 class CustomUser(AbstractUser):
-    username = models.CharField(max_length=150, unique=True, null=True, blank=True)
+    username = models.CharField(max_length=150, null=True, blank=True)
     email = models.EmailField(unique=True)
-    phone = models.CharField( max_length=13,unique=True,validators=[phone_validator])
+    phone = models.CharField(max_length=13, unique=True, validators=[phone_validator])
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-
     is_email_verified = models.BooleanField(default=False)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [ 'phone', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['phone', 'first_name', 'last_name']
 
     def send_verification_email(self, request):
         token = default_token_generator.make_token(self)
         uid = urlsafe_base64_encode(force_bytes(self.pk))
-
-        # redirect to front
         activation_link = request.build_absolute_uri(
             reverse('users:verify-email', kwargs={'uidb64': uid, 'token': token})
         )
-
         send_mail(
             subject='Verify your email',
             message=f'Almost done! Click the link to verify your email: {activation_link}',
@@ -69,7 +69,6 @@ class CustomUser(AbstractUser):
             recipient_list=[self.email],
             fail_silently=False,
         )
-
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
@@ -80,7 +79,8 @@ class CustomUser(AbstractUser):
             logger.info(f"User updated: {self.email} (ID: {self.pk})")
 
     def __str__(self):
-        return self.first_name
+        return f"{self.first_name} {self.last_name}"
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
@@ -95,6 +95,7 @@ class UserProfile(models.Model):
         blank=True,
         default=list
     )
+
 
 @receiver(post_save, sender=CustomUser)
 def create_user_profile(sender, instance, created, **kwargs):

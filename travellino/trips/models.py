@@ -30,7 +30,7 @@ class TransportBooking(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     passengers_count = models.PositiveIntegerField()
     transport_option = models.ForeignKey(TransportOption, on_delete=models.SET_NULL, null=True, blank=True)
-    transport_details_id = models.CharField(max_length=200, blank=True)  # external API id
+    transport_details_id = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return f"{self.departure_point} -> {self.arrival_point}"
@@ -45,7 +45,7 @@ class AccommodationBooking(models.Model):
     price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     accommodation_option = models.ForeignKey(AccommodationOption, on_delete=models.SET_NULL, null=True, blank=True)
-    accommodation_details_id = models.CharField(max_length=200, blank=True)  # external API id
+    accommodation_details_id = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.accommodation_name
@@ -60,7 +60,8 @@ class TripActivity(models.Model):
     end_time = models.TimeField()
 
     def __str__(self):
-        return f"{self.activity.title} {self.scheduled_date}"
+        activity_title = self.activity.title if self.activity else "Custom Activity"
+        return f"{activity_title} {self.scheduled_date}"
 
 class AccessLevel(models.TextChoices):
     VIEW = 'View', 'View'

@@ -1,0 +1,312 @@
+[
+  {
+    "model": "trips.trip",
+    "pk": "e1b2c3d4-0005-0000-0000-000000000001",
+    "fields": {
+      "title": "Summer Trip to Paris",
+      "city": "a1b2c3d4-0001-0000-0000-000000000001",
+      "start_date": "2026-07-15",
+      "end_date": "2026-07-22",
+      "owner": 1
+    }
+  },
+  {
+    "model": "trips.trip",
+    "pk": "e1b2c3d4-0005-0000-0000-000000000002",
+    "fields": {
+      "title": "Weekend in Kyiv",
+      "city": "a1b2c3d4-0001-0000-0000-000000000002",
+      "start_date": "2026-08-20",
+      "end_date": "2026-08-23",
+      "owner": 1
+    }
+  },
+  {
+    "model": "trips.trip",
+    "pk": "e1b2c3d4-0005-0000-0000-000000000003",
+    "fields": {
+      "title": "Barcelona Beach Vacation",
+      "city": "a1b2c3d4-0001-0000-0000-000000000003",
+      "start_date": "2026-09-01",
+      "end_date": "2026-09-10",
+      "owner": 2
+    }
+  },
+  {
+    "model": "trips.trip",
+    "pk": "e1b2c3d4-0005-0000-0000-000000000004",
+    "fields": {
+      "title": "Northern Lights Chase",
+      "city": "a1b2c3d4-0001-0000-0000-000000000004",
+      "start_date": "2026-11-10",
+      "end_date": "2026-11-15",
+      "owner": 3
+    }
+  },
+  {
+    "model": "trips.trip",
+    "pk": "e1b2c3d4-0005-0000-0000-000000000005",
+    "fields": {
+      "title": "Asian Food Adventure",
+      "city": "a1b2c3d4-0001-0000-0000-000000000005",
+      "start_date": "2026-12-05",
+      "end_date": "2026-12-15",
+      "owner": 4
+    }
+  },
+
+  {
+    "model": "trips.transportbooking",
+    "pk": "f1b2c3d4-0006-0000-0000-000000000001",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000001",
+      "departure_point": "Kyiv",
+      "arrival_point": "Paris",
+      "departure_datetime": "2026-07-15T08:30:00Z",
+      "arrival_datetime": "2026-07-15T11:45:00Z",
+      "price": "210.00",
+      "passengers_count": 1,
+      "transport_option": "c1b2c3d4-0003-0000-0000-000000000001",
+      "transport_details_id": null
+    }
+  },
+  {
+    "model": "trips.transportbooking",
+    "pk": "f1b2c3d4-0006-0000-0000-000000000002",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000003",
+      "departure_point": "Kyiv",
+      "arrival_point": "Barcelona",
+      "departure_datetime": "2026-09-01T14:00:00Z",
+      "arrival_datetime": "2026-09-01T17:30:00Z",
+      "price": "180.00",
+      "passengers_count": 2,
+      "transport_option": "c1b2c3d4-0003-0000-0000-000000000002",
+      "transport_details_id": null
+    }
+  },
+  {
+    "model": "trips.transportbooking",
+    "pk": "f1b2c3d4-0006-0000-0000-000000000003",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000004",
+      "departure_point": "Kyiv",
+      "arrival_point": "Reykjavik",
+      "departure_datetime": "2026-11-10T06:15:00Z",
+      "arrival_datetime": "2026-11-10T10:30:00Z",
+      "price": "390.00",
+      "passengers_count": 1,
+      "transport_option": "c1b2c3d4-0003-0000-0000-000000000004",
+      "transport_details_id": null
+    }
+  },
+  {
+    "model": "trips.transportbooking",
+    "pk": "f1b2c3d4-0006-0000-0000-000000000004",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000005",
+      "departure_point": "Kyiv",
+      "arrival_point": "Bangkok",
+      "departure_datetime": "2026-12-05T20:00:00Z",
+      "arrival_datetime": "2026-12-06T09:30:00Z",
+      "price": "520.00",
+      "passengers_count": 2,
+      "transport_option": "c1b2c3d4-0003-0000-0000-000000000005",
+      "transport_details_id": null
+    }
+  },
+
+  {
+    "model": "trips.accommodationbooking",
+    "pk": "f1b2c3d4-0007-0000-0000-000000000001",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000001",
+      "accommodation_name": "Hotel Le Marais",
+      "check_in_date": "2026-07-15",
+      "check_out_date": "2026-07-22",
+      "price_per_night": "145.00",
+      "total_price": "1015.00",
+      "accommodation_option": "d1b2c3d4-0004-0000-0000-000000000001",
+      "accommodation_details_id": null
+    }
+  },
+  {
+    "model": "trips.accommodationbooking",
+    "pk": "f1b2c3d4-0007-0000-0000-000000000002",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000002",
+      "accommodation_name": "Hotel Ukraine",
+      "check_in_date": "2026-08-20",
+      "check_out_date": "2026-08-23",
+      "price_per_night": "75.00",
+      "total_price": "225.00",
+      "accommodation_option": "d1b2c3d4-0004-0000-0000-000000000003",
+      "accommodation_details_id": null
+    }
+  },
+  {
+    "model": "trips.accommodationbooking",
+    "pk": "f1b2c3d4-0007-0000-0000-000000000003",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000003",
+      "accommodation_name": "Barcelo Raval",
+      "check_in_date": "2026-09-01",
+      "check_out_date": "2026-09-10",
+      "price_per_night": "130.00",
+      "total_price": "1170.00",
+      "accommodation_option": "d1b2c3d4-0004-0000-0000-000000000004",
+      "accommodation_details_id": null
+    }
+  },
+  {
+    "model": "trips.accommodationbooking",
+    "pk": "f1b2c3d4-0007-0000-0000-000000000004",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000004",
+      "accommodation_name": "Reykjavik Konsulat Hotel",
+      "check_in_date": "2026-11-10",
+      "check_out_date": "2026-11-15",
+      "price_per_night": "280.00",
+      "total_price": "1400.00",
+      "accommodation_option": "d1b2c3d4-0004-0000-0000-000000000005",
+      "accommodation_details_id": null
+    }
+  },
+  {
+    "model": "trips.accommodationbooking",
+    "pk": "f1b2c3d4-0007-0000-0000-000000000005",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000005",
+      "accommodation_name": "Lub d Bangkok Silom",
+      "check_in_date": "2026-12-06",
+      "check_out_date": "2026-12-15",
+      "price_per_night": "28.00",
+      "total_price": "252.00",
+      "accommodation_option": "d1b2c3d4-0004-0000-0000-000000000006",
+      "accommodation_details_id": null
+    }
+  },
+
+  {
+    "model": "trips.tripactivity",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000001",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000001",
+      "activity": "b1b2c3d4-0002-0000-0000-000000000001",
+      "scheduled_date": "2026-07-16",
+      "start_time": "10:00:00",
+      "end_time": "14:00:00"
+    }
+  },
+  {
+    "model": "trips.tripactivity",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000002",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000001",
+      "activity": "b1b2c3d4-0002-0000-0000-000000000002",
+      "scheduled_date": "2026-07-17",
+      "start_time": "18:00:00",
+      "end_time": "21:00:00"
+    }
+  },
+  {
+    "model": "trips.tripactivity",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000003",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000002",
+      "activity": "b1b2c3d4-0002-0000-0000-000000000003",
+      "scheduled_date": "2026-08-21",
+      "start_time": "11:00:00",
+      "end_time": "13:30:00"
+    }
+  },
+  {
+    "model": "trips.tripactivity",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000004",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000003",
+      "activity": "b1b2c3d4-0002-0000-0000-000000000006",
+      "scheduled_date": "2026-09-02",
+      "start_time": "09:00:00",
+      "end_time": "18:00:00"
+    }
+  },
+  {
+    "model": "trips.tripactivity",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000005",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000004",
+      "activity": "b1b2c3d4-0002-0000-0000-000000000007",
+      "scheduled_date": "2026-11-11",
+      "start_time": "20:00:00",
+      "end_time": "23:30:00"
+    }
+  },
+  {
+    "model": "trips.tripactivity",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000006",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000005",
+      "activity": "b1b2c3d4-0002-0000-0000-000000000008",
+      "scheduled_date": "2026-12-06",
+      "start_time": "10:00:00",
+      "end_time": "13:00:00"
+    }
+  },
+  {
+    "model": "trips.tripactivity",
+    "pk": "f1b2c3d4-0008-0000-0000-000000000007",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000005",
+      "activity": "b1b2c3d4-0002-0000-0000-000000000009",
+      "scheduled_date": "2026-12-06",
+      "start_time": "15:00:00",
+      "end_time": "19:00:00"
+    }
+  },
+
+  {
+    "model": "trips.tripparticipant",
+    "pk": "f1b2c3d4-0009-0000-0000-000000000001",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000001",
+      "user": 2,
+      "invitee_email": "john@example.com",
+      "access_level": "View",
+      "status": "Accepted"
+    }
+  },
+  {
+    "model": "trips.tripparticipant",
+    "pk": "f1b2c3d4-0009-0000-0000-000000000002",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000001",
+      "user": null,
+      "invitee_email": "stranger@example.com",
+      "access_level": "Edit",
+      "status": "Pending"
+    }
+  },
+  {
+    "model": "trips.tripparticipant",
+    "pk": "f1b2c3d4-0009-0000-0000-000000000003",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000003",
+      "user": 1,
+      "invitee_email": "valeria@travelino.com",
+      "access_level": "Edit",
+      "status": "Accepted"
+    }
+  },
+  {
+    "model": "trips.tripparticipant",
+    "pk": "f1b2c3d4-0009-0000-0000-000000000004",
+    "fields": {
+      "trip": "e1b2c3d4-0005-0000-0000-000000000004",
+      "user": 5,
+      "invitee_email": "marco@example.com",
+      "access_level": "View",
+      "status": "Accepted"
+    }
+  }
+]
