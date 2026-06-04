@@ -65,10 +65,11 @@ class CustomUser(AbstractUser):
         send_mail(
             subject='Verify your email',
             message=f'Almost done! Click the link to verify your email: {activation_link}',
-            from_email='noreply@yoursite.com',
+            from_email='travellinocappuchino@gmail.com',
             recipient_list=[self.email],
             fail_silently=False,
         )
+        print(f"LINK GENERATED: {activation_link}")
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
