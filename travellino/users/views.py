@@ -32,7 +32,8 @@ class RegisterView(APIView):
             try:
                 with transaction.atomic():
                     user = serializer.save()
-                    user.send_verification_email(request)
+
+                user.send_verification_email(request)
             except Exception as e:
                 logger.error(f"Registration failed: {e}")
                 return Response(
@@ -43,6 +44,7 @@ class RegisterView(APIView):
                 {'message': 'Registration successful. Please check your email to verify your account.'},
                 status=status.HTTP_201_CREATED
             )
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
