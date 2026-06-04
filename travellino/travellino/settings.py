@@ -95,7 +95,7 @@ INSTALLED_APPS = [
     'catalog',
     'trips',
     'rest_framework_simplejwt',
-    'django_api_readme',
+  #  'django_api_readme',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
