@@ -2,7 +2,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-
+from django.conf import settings
 
 def validate_password_strength(password):
     if len(password) < 8:
@@ -24,5 +24,15 @@ def send_password_reset_email(user):
         message=f'Click the link to reset your password: {reset_link}',
         from_email='noreply@yoursite.com',
         recipient_list=[user.email],
+        fail_silently=False,
+    )
+
+def send_invite_email(invitee_email, trip, participant_id):
+    invite_link = f"http://localhost:3000/invite/accept?trip={trip.id}&participant={participant_id}"
+    send_mail(
+        subject=f'You have been invited to a trip: {trip.title}',
+        message=f'You have been invited to join "{trip.title}". Accept the invite: {invite_link}',
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[invitee_email],
         fail_silently=False,
     )

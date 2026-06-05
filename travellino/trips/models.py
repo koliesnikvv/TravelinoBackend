@@ -55,6 +55,7 @@ class TripActivity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='activities')
     activity = models.ForeignKey(Activity, on_delete=models.SET_NULL, null=True, blank=True, related_name='trip_activities')
+    activity_details_id = models.CharField(max_length=200, null=True, blank=True)
     scheduled_date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
@@ -63,13 +64,16 @@ class TripActivity(models.Model):
         activity_title = self.activity.title if self.activity else "Custom Activity"
         return f"{activity_title} {self.scheduled_date}"
 
+
 class AccessLevel(models.TextChoices):
     VIEW = 'View', 'View'
     EDIT = 'Edit', 'Edit'
 
+
 class InviteStatus(models.TextChoices):
     PENDING = 'Pending', 'Pending'
     ACCEPTED = 'Accepted', 'Accepted'
+
 
 class TripParticipant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
