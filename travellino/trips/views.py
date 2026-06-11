@@ -1,4 +1,7 @@
 from django.db.models import Q
+from django.http import HttpResponse
+from datetime import datetime, timedelta
+from icalendar import Calendar, Event
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -58,6 +61,66 @@ class TripViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN
             )
         return super().destroy(request, *args, **kwargs)
+
+    @action(detail=True, methods=['get'], url_path='export')
+    def export_ics(self, request, pk=None):
+        # GET /api/trips/{pk}/export/?activities=true&transport=true&accommodation=true
+        # Query params are strings — compare against 'true' explicitly.
+        # Missing param defaults to True so omitting it is the same as including it.
+        trip = self.get_object()
+
+        include_activities = request.query_params.get('activities', 'true') == 'true'
+        include_transport = request.query_params.get('transport', 'true') == 'true'
+        include_accommodation = request.query_params.get('accommodation', 'true') == 'true'
+
+        cal = Calendar()
+        cal.add('prodid', '-//Travellino//EN')
+        cal.add('version', '2.0')
+        cal.add('calscale', 'GREGORIAN')
+        cal.add('method', 'PUBLISH')
+
+        if include_activities:
+            for a in trip.activities.select_related('activity').all():
+                ev = Event()
+                ev.add('uid', f'activity-{a.id}@travellino')
+                ev.add('summary', a.activity.title if a.activity else 'Activity')
+                # start_time / end_time are TimeField — stored without timezone (local time).
+                # Use naive datetime (no tzinfo) so the calendar displays the time as-is,
+                # without any UTC conversion ("floating" time per RFC 5545).
+                ev.add('dtstart', datetime.combine(a.scheduled_date, a.start_time))
+                ev.add('dtend', datetime.combine(a.scheduled_date, a.end_time))
+                cal.add_component(ev)
+
+        if include_transport:
+            for t in trip.transport_bookings.all():
+                ev = Event()
+                ev.add('uid', f'transport-{t.id}@travellino')
+                ev.add('summary', f'{t.departure_point} → {t.arrival_point}')
+                # departure_datetime / arrival_datetime are DateTimeField —
+                # Django returns timezone-aware objects when USE_TZ=True. Keep as-is.
+                ev.add('dtstart', t.departure_datetime)
+                ev.add('dtend', t.arrival_datetime)
+                if t.transport_option and t.transport_option.carrier_name:
+                    ev.add('description', t.transport_option.carrier_name)
+                cal.add_component(ev)
+
+        if include_accommodation:
+            for a in trip.accommodation_bookings.all():
+                ev = Event()
+                ev.add('uid', f'accommodation-{a.id}@travellino')
+                ev.add('summary', a.accommodation_name)
+                # All-day events use date objects — icalendar sets VALUE=DATE automatically.
+                ev.add('dtstart', a.check_in_date)
+                # DTEND for VALUE=DATE is exclusive per RFC 5545.
+                # check_out_date is the actual checkout day, so add 1 day
+                # so the event visually spans through that day in the calendar.
+                ev.add('dtend', a.check_out_date + timedelta(days=1))
+                cal.add_component(ev)
+
+        filename = f'{trip.title}.ics'
+        response = HttpResponse(cal.to_ical(), content_type='text/calendar; charset=utf-8')
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
 
 
 class NestedTripViewSet(viewsets.ModelViewSet):
