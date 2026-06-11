@@ -1,11 +1,14 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+
+from . import views
 from .views import (
     TripViewSet,
     TransportBookingViewSet,
     AccommodationBookingViewSet,
     TripActivityViewSet,
     TripParticipantViewSet,
+
 )
 
 router = DefaultRouter()
@@ -49,4 +52,7 @@ urlpatterns = [
     path('<uuid:trip_pk>/participants/', participants_list, name='trip-participants-list'),
     path('<uuid:trip_pk>/participants/<uuid:pk>/', participants_detail, name='trip-participants-detail'),
     path('<uuid:trip_pk>/participants/<uuid:pk>/accept/', participants_accept, name='trip-participants-accept'),
+    path('flights/search/', views.flight_offers, name='flight_search'),
+    path('hotels/search/', views.hotel_search, name='hotel_search'),
+    path('airports/search/', views.airport_search, name='airport_search'),
 ]
