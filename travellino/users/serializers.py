@@ -3,7 +3,7 @@ from django.core.validators import validate_email
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from users.models import UserProfile
+from users.models import UserProfile, phone_validator
 from users.utils import validate_password_strength
 
 CustomUser = get_user_model()
@@ -13,7 +13,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     password_check = serializers.CharField(write_only=True)
     email = serializers.EmailField(required=True)
-    phone = serializers.CharField(required=True)
+    phone = serializers.CharField(required=True, validators=[phone_validator])
 
     class Meta:
         model = CustomUser

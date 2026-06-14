@@ -1,84 +1,94 @@
-import uuid
-import pandas as pd
+import csv
+import json
+import os
+
 from django.core.management.base import BaseCommand, CommandError
+
 from catalog.models import City
 
-#to run enter python manage.py import_cities data/cities_dataset.csv
+# rewrite
+#python manage.py import_cities data/cities_dataset.csv
+# upsert
+#python manage.py import_cities data/cities_dataset.csv --no-clear
 
 class Command(BaseCommand):
-    help = 'Imports city data from a CSV dataset into the database'
+    help = 'Import cities from CSV dataset. Clears existing cities and re-imports from scratch.'
 
     def add_arguments(self, parser):
-        parser.add_argument('file_path', type=str, help='Path to the CSV dataset file')
+        parser.add_argument(
+            'csv_path',
+            type=str,
+            help='Absolute or relative path to the cities CSV file.',
+        )
+        parser.add_argument(
+            '--no-clear',
+            action='store_true',
+            help='Skip clearing existing cities before import (upsert by id instead).',
+        )
 
     def handle(self, *args, **options):
-        file_path = options['file_path']
+        csv_path = options['csv_path']
 
-        if not file_path.endswith('.csv'):
-            raise CommandError("Invalid file format. This commands only supports .csv files.")
+        if not os.path.exists(csv_path):
+            raise CommandError(f'File not found: {csv_path}')
 
-        self.stdout.write(self.style.NOTICE(f"Reading CSV file: {file_path}..."))
+        no_clear = options['no_clear']
 
-        try:
-            df = pd.read_csv(file_path)
-        except Exception as e:
-            raise CommandError(f"Failed to read CSV file: {e}")
+        if not no_clear:
+            deleted_count, _ = City.objects.all().delete()
+            self.stdout.write(f'Cleared {deleted_count} existing cities.')
 
-        self.stdout.write(self.style.NOTICE(f"Rows found for import: {len(df)}"))
+        created = 0
+        updated = 0
+        errors = 0
 
-        created_count = 0
-        updated_count = 0
+        with open(csv_path, newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
 
-        for index, row in df.iterrows():
-            try:
-                # Handle UUID
-                row_id = row.get('id')
-                city_id = uuid.UUID(str(row_id)) if row_id else uuid.uuid4()
+            for i, row in enumerate(reader, start=1):
+                try:
+                    # ideal_durations is stored as JSON array string: ["Short trip","One week"]
+                    ideal_durations = json.loads(row['ideal_durations'])
 
-                ideal_durations = row.get('ideal_durations', [])
-                if isinstance(ideal_durations, str):
-                    clean_str = ideal_durations.strip("[]\"' ")
-                    ideal_durations = [x.strip("['\" ]") for x in clean_str.split(',') if x.strip()]
+                    city_data = dict(
+                        city=row['city'].strip(),
+                        country=row['country'].strip(),
+                        region=row['region'].strip(),
+                        short_description=row['short_description'].strip(),
+                        ideal_durations=ideal_durations,
+                        budget_level=row['budget_level'].strip(),
+                        culture=int(row['culture']),
+                        adventure=int(row['adventure']),
+                        nature=int(row['nature']),
+                        beaches=int(row['beaches']),
+                        nightlife=int(row['nightlife']),
+                        cuisine=int(row['cuisine']),
+                        wellness=int(row['wellness']),
+                        urban=int(row['urban']),
+                        seclusion=int(row['seclusion']),
+                        # reserve fields — uncomment when models are migrated
+                        # latitude=row['latitude'],
+                        # longitude=row['longitude'],
+                        # avg_temp_monthly=json.loads(row['avg_temp_monthly']),
+                    )
 
-                city_data = {
-                    'city': row['city'],
-                    'country': row['country'],
-                    'region': row['region'],
-                    'short_description': row['short_description'],
-                    'ideal_durations': ideal_durations,
-                    'budget_level': row['budget_level'],
+                    if no_clear:
+                        _, was_created = City.objects.update_or_create(
+                            id=row['id'].strip(),
+                            defaults=city_data,
+                        )
+                        if was_created:
+                            created += 1
+                        else:
+                            updated += 1
+                    else:
+                        City.objects.create(id=row['id'].strip(), **city_data)
+                        created += 1
 
-                    # Direct cast to int since dataset guarantees no null values
-                    'culture': int(row['culture']),
-                    'adventure': int(row['adventure']),
-                    'nature': int(row['nature']),
-                    'beaches': int(row['beaches']),
-                    'nightlife': int(row['nightlife']),
-                    'cuisine': int(row['cuisine']),
-                    'wellness': int(row['wellness']),
-                    'urban': int(row['urban']),
-                    'seclusion': int(row['seclusion']),
-
-                    # Optional fields (uncomment if activated in models.py)
-                    # 'latitude': float(row['latitude']),
-                    # 'longitude': float(row['longitude']),
-                }
-
-                # Using update_or_create to allow safe re-runs without duplication
-                obj, created = City.objects.update_or_create(
-                    id=city_id,
-                    defaults=city_data
-                )
-
-                if created:
-                    created_count += 1
-                else:
-                    updated_count += 1
-
-            except Exception as e:
-                self.stdout.write(self.style.ERROR(f"Error at row {index} ({row.get('city')}): {e}"))
-                continue
+                except Exception as e:
+                    errors += 1
+                    self.stderr.write(f'Row {i} ({row.get("city", "?")}): {e}')
 
         self.stdout.write(self.style.SUCCESS(
-            f"Import completed! Created: {created_count}, Updated: {updated_count}."
+            f'Done. Created: {created}, Updated: {updated}, Errors: {errors}.'
         ))

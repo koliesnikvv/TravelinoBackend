@@ -112,6 +112,7 @@ INSTALLED_APPS = [
     'trips',
     'rest_framework_simplejwt',
   #  'django_api_readme',
+    'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
