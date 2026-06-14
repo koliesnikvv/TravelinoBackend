@@ -1,5 +1,6 @@
 import logging
 
+from django.core.cache import cache
 from django.db.models import Q
 from rest_framework import generics, permissions
 from rest_framework.pagination import PageNumberPagination
@@ -49,12 +50,10 @@ VALID_SORT_TRANSPORT = ['base_price', '-base_price']
 VALID_SORT_ACCOMMODATION = ['price_per_night', '-price_per_night', 'rating', '-rating']
 
 
-
 class CityPagination(PageNumberPagination):
     page_size = 12
     page_size_query_param = 'page_size'
     max_page_size = 50
-
 
 
 class CityListView(generics.ListAPIView):
@@ -108,6 +107,12 @@ class RecommendedCitiesView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        user_id = request.user.id
+        cache_key = f"recommended_cities:{user_id}"
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+
         try:
             preferences = request.user.profile.preferences or []
         except Exception:
@@ -145,8 +150,8 @@ class RecommendedCitiesView(APIView):
                 top_cities = scored[:10]
 
         serializer = CitySerializer(top_cities, many=True)
+        cache.set(cache_key, serializer.data, 3600)  # 1 hour
         return Response(serializer.data)
-
 
 
 class ActivityListView(generics.ListAPIView):
@@ -180,7 +185,6 @@ class ActivityDetailView(generics.RetrieveAPIView):
     queryset = Activity.objects.select_related('city').all()
 
 
-
 class TransportOptionListView(generics.ListAPIView):
     """
     GET /api/catalog/transport/
@@ -188,6 +192,19 @@ class TransportOptionListView(generics.ListAPIView):
     """
     serializer_class = TransportOptionSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def list(self, request, *args, **kwargs):
+        query_params = tuple(sorted(request.query_params.items()))
+        cache_key = f"transport_list:{hash(query_params)}"
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+
+        response = super().list(request, *args, **kwargs)
+        # кешуємо на 10 хвилин (600 секунд)
+        cache.set(cache_key, response.data, 600)
+        print(f"REDIS SAVE: saved data for key {cache_key}")
+        return response
 
     def get_queryset(self):
         qs = TransportOption.objects.all()
@@ -222,7 +239,6 @@ class TransportOptionDetailView(generics.RetrieveAPIView):
     queryset = TransportOption.objects.all()
 
 
-
 class AccommodationOptionListView(generics.ListAPIView):
     """
     GET /api/catalog/accommodations/
@@ -230,6 +246,19 @@ class AccommodationOptionListView(generics.ListAPIView):
     """
     serializer_class = AccommodationOptionSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def list(self, request, *args, **kwargs):
+        query_params = tuple(sorted(request.query_params.items()))
+        cache_key = f"accommodation_list:{hash(query_params)}"
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, 600)  # 10 хвилин
+        print(f"REDIS SAVE: saved data for key {cache_key}")
+
+        return response
 
     def get_queryset(self):
         qs = AccommodationOption.objects.select_related('city').all()
