@@ -12,7 +12,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
+from dotenv import load_dotenv
+from urllib.parse import urlparse, parse_qsl
 
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,8 +30,6 @@ SECRET_KEY = 'django-insecure-1m=kz%#3g-e6nbegk+gl7v=d)(skg1g4j3xwre6lxskb_%a!me
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -64,15 +66,6 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-# Application definition
-# Add these at the top of your settings.py
-import os
-from dotenv import load_dotenv
-from urllib.parse import urlparse, parse_qsl
-
-load_dotenv()
-
-# Replace the DATABASES section of your settings.py with this
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
 
 DATABASES = {
@@ -95,7 +88,7 @@ INSTALLED_APPS = [
     'catalog',
     'trips',
     'rest_framework_simplejwt',
-  #  'django_api_readme',
+    'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -103,7 +96,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.postgres'
+    'django.contrib.postgres',
 ]
 
 ROOT_URLCONF = 'travellino.urls'
@@ -124,19 +117,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'travellino.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-"""
 
 
 # Password validation
