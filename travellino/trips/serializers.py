@@ -4,8 +4,7 @@ from .models import Trip, TransportBooking, AccommodationBooking, TripActivity, 
 
 
 class TripSerializer(serializers.ModelSerializer):
-    # city_name as flat string for list view: trip.city_name
-    city_name = serializers.CharField(source='city.name', read_only=True)
+    city_name = serializers.CharField(source='city.city', read_only=True)
 
     class Meta:
         model = Trip
@@ -32,6 +31,8 @@ class TransportBookingSerializer(serializers.ModelSerializer):
             'transport_type',
             'transport_details_id',
         ]
+        read_only_fields = ['id', 'trip']
+
 
 
 class AccommodationBookingSerializer(serializers.ModelSerializer):
@@ -48,6 +49,7 @@ class AccommodationBookingSerializer(serializers.ModelSerializer):
             'accommodation_option',
             'accommodation_details_id',
         ]
+        read_only_fields = ['id', 'trip']
 
 
 class TripActivitySerializer(serializers.ModelSerializer):
@@ -70,6 +72,7 @@ class TripActivitySerializer(serializers.ModelSerializer):
             'start_time',
             'end_time',
         ]
+        read_only_fields = ['id', 'trip']
 
 
 class TripParticipantSerializer(serializers.ModelSerializer):
