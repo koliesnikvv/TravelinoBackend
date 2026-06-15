@@ -1,0 +1,327 @@
+[
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 1,
+    "fields": {
+      "country_name": "France",
+      "universal": "112",
+      "police": "17",
+      "ambulance": "15",
+      "fire": "18",
+      "tourist_police": "112",
+      "note": "112 - single European emergency number. SMS 114 available for hearing impaired."
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 2,
+    "fields": {
+      "country_name": "Ukraine",
+      "universal": "112",
+      "police": "102",
+      "ambulance": "103",
+      "fire": "101",
+      "tourist_police": "102",
+      "note": "112 works for all emergency services. English-speaking operator available."
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 3,
+    "fields": {
+      "country_name": "Spain",
+      "universal": "112",
+      "police": "091",
+      "ambulance": "061",
+      "fire": "080",
+      "tourist_police": "112",
+      "note": "66% of calls go to 112. Tourist assistance: +34 93 285 38 32"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 4,
+    "fields": {
+      "country_name": "Italy",
+      "universal": "112",
+      "police": "113",
+      "ambulance": "118",
+      "fire": "115",
+      "tourist_police": "112",
+      "note": "112 (Nuovo Numero Unico Europeo) - single emergency number"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 5,
+    "fields": {
+      "country_name": "Germany",
+      "universal": "112",
+      "police": "110",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "110",
+      "note": "112 for ambulance and fire, 110 for police"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 6,
+    "fields": {
+      "country_name": "United Kingdom",
+      "universal": "999",
+      "police": "999",
+      "ambulance": "999",
+      "fire": "999",
+      "tourist_police": "999",
+      "note": "999 for all services. 112 also works as backup."
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 7,
+    "fields": {
+      "country_name": "Netherlands",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112 for all emergency services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 8,
+    "fields": {
+      "country_name": "Poland",
+      "universal": "112",
+      "police": "997",
+      "ambulance": "999",
+      "fire": "998",
+      "tourist_police": "112",
+      "note": "112 works alongside national numbers"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 9,
+    "fields": {
+      "country_name": "Portugal",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "INEM 112 - centralized emergency system"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 10,
+    "fields": {
+      "country_name": "Greece",
+      "universal": "112",
+      "police": "100",
+      "ambulance": "166",
+      "fire": "199",
+      "tourist_police": "171",
+      "note": "Tourist police: 171 (24/7)"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 11,
+    "fields": {
+      "country_name": "Thailand",
+      "universal": "191",
+      "police": "191",
+      "ambulance": "1669",
+      "fire": "199",
+      "tourist_police": "1155",
+      "note": "Tourist police 1155 (English), general number 191"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 12,
+    "fields": {
+      "country_name": "Japan",
+      "universal": "110",
+      "police": "110",
+      "ambulance": "119",
+      "fire": "119",
+      "tourist_police": "#9110",
+      "note": "Police: 110, Ambulance/Fire: 119. English available."
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 13,
+    "fields": {
+      "country_name": "China",
+      "universal": "110",
+      "police": "110",
+      "ambulance": "120",
+      "fire": "119",
+      "tourist_police": "110",
+      "note": "Police: 110, Ambulance: 120, Fire: 119"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 14,
+    "fields": {
+      "country_name": "Turkey",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112 for all services. English-speaking operators available."
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 15,
+    "fields": {
+      "country_name": "United States",
+      "universal": "911",
+      "police": "911",
+      "ambulance": "911",
+      "fire": "911",
+      "tourist_police": "911",
+      "note": "Single number 911 for all emergencies"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 16,
+    "fields": {
+      "country_name": "Canada",
+      "universal": "911",
+      "police": "911",
+      "ambulance": "911",
+      "fire": "911",
+      "tourist_police": "911",
+      "note": "Single number 911 across Canada"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 17,
+    "fields": {
+      "country_name": "Australia",
+      "universal": "000",
+      "police": "000",
+      "ambulance": "000",
+      "fire": "000",
+      "tourist_police": "000",
+      "note": "000 for all services. 112 works from mobile phones."
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 18,
+    "fields": {
+      "country_name": "New Zealand",
+      "universal": "111",
+      "police": "111",
+      "ambulance": "111",
+      "fire": "111",
+      "tourist_police": "111",
+      "note": "111 for all emergency services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 19,
+    "fields": {
+      "country_name": "Brazil",
+      "universal": "190",
+      "police": "190",
+      "ambulance": "192",
+      "fire": "193",
+      "tourist_police": "112",
+      "note": "Police: 190, Ambulance: 192, Fire: 193"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 20,
+    "fields": {
+      "country_name": "Argentina",
+      "universal": "911",
+      "police": "911",
+      "ambulance": "107",
+      "fire": "100",
+      "tourist_police": "911",
+      "note": "911 for police, 107 ambulance, 100 fire"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 21,
+    "fields": {
+      "country_name": "South Africa",
+      "universal": "10111",
+      "police": "10111",
+      "ambulance": "10177",
+      "fire": "10111",
+      "tourist_police": "10111",
+      "note": "Police/Fire: 10111, Ambulance: 10177"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 22,
+    "fields": {
+      "country_name": "Egypt",
+      "universal": "122",
+      "police": "122",
+      "ambulance": "123",
+      "fire": "180",
+      "tourist_police": "126",
+      "note": "Police: 122, Tourist police: 126"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 23,
+    "fields": {
+      "country_name": "India",
+      "universal": "112",
+      "police": "100",
+      "ambulance": "102",
+      "fire": "101",
+      "tourist_police": "112",
+      "note": "112 - single emergency number"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 24,
+    "fields": {
+      "country_name": "Indonesia",
+      "universal": "110",
+      "police": "110",
+      "ambulance": "118",
+      "fire": "113",
+      "tourist_police": "112",
+      "note": "Police: 110, Ambulance: 118, Tourist: 112"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 25,
+    "fields": {
+      "country_name": "United Arab Emirates",
+      "universal": "112",
+      "police": "999",
+      "ambulance": "998",
+      "fire": "997",
+      "tourist_police": "800 4438",
+      "note": "112 works from mobile phones. Tourist police: 800 4438 (English)"
+    }
+  }
+]

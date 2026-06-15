@@ -106,3 +106,23 @@ class AccommodationOption(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+class EmergencyContact(models.Model):
+    """Екстрені номери для країни"""
+    country_name = models.CharField(max_length=100, unique=True)
+    universal = models.CharField(max_length=20, blank=True, default='')
+    police = models.CharField(max_length=20, blank=True, default='')
+    ambulance = models.CharField(max_length=20, blank=True, default='')
+    fire = models.CharField(max_length=20, blank=True, default='')
+    tourist_police = models.CharField(max_length=30, blank=True, default='')
+    note = models.TextField(blank=True, default='')
+
+    class Meta:
+        verbose_name = 'Emergency Contact'
+        verbose_name_plural = 'Emergency Contacts'
+        ordering = ['country_name']
+
+    def __str__(self):
+        return f"Emergency numbers for {self.country_name}"
