@@ -58,6 +58,7 @@ class City(models.Model):
     wellness = models.IntegerField()
     urban = models.IntegerField()
     seclusion = models.IntegerField()
+    image_url = models.URLField(max_length=500, blank=True, default='')
 
     # reserve: for transport and accommodation API integration
     # latitude = models.DecimalField(max_digits=19, decimal_places=16)

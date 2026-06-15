@@ -28,6 +28,7 @@ class CitySerializer(serializers.ModelSerializer):
             'wellness',
             'urban',
             'seclusion',
+            'image_url',
         ]
 
 

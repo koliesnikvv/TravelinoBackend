@@ -5,10 +5,11 @@ from .models import Trip, TransportBooking, AccommodationBooking, TripActivity, 
 
 class TripSerializer(serializers.ModelSerializer):
     city_name = serializers.CharField(source='city.city', read_only=True)
+    city_image_url = serializers.CharField(source='city.image_url', read_only=True)  # <-- додати
 
     class Meta:
         model = Trip
-        fields = ['id', 'title', 'city', 'city_name', 'start_date', 'end_date', 'owner']
+        fields = ['id', 'title', 'city', 'city_name', 'city_image_url', 'start_date', 'end_date', 'owner']
         read_only_fields = ['owner']
 
 
