@@ -14,3 +14,5 @@ redis>=5.0.0
 django-redis>=5.4.0
 hiredis>=2.3.0
 icalendar
+protobuf
+httpx
