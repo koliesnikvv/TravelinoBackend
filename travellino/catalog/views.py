@@ -15,11 +15,8 @@ from .serializers import (
     AccommodationOptionSerializer,
 )
 from .services import (
-    CATEGORY_TO_KINDS,
-    get_city_coordinates,
     get_place_detail,
     search_places,
-    build_place_detail_response,
 )
 
 logger = logging.getLogger(__name__)
@@ -164,15 +161,6 @@ class RecommendedCitiesView(APIView):
 class ActivityListView(APIView):
     """
     GET /api/catalog/activities/
-    Params:
-        city            UUID, required
-        query           free text
-        category        Culture | Adventure | Nature | Beaches | Nightlife | Cuisine | Wellness | Urban | Seclusion
-        rate            1 | 2 | 3
-        price           budget | moderate | expensive
-        location_type   outdoor | indoor
-        vibe            active | relaxed
-        page            int, default 1, returns 10 results per page
     """
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -204,20 +192,15 @@ class ActivityListView(APIView):
         except City.DoesNotExist:
             return Response({'error': 'City not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        # cache key covers all search params — same params = same cached result
+        # cache key covers all search params
         search_params_hash = hash((city_id, query, category, rate, price, location_type, vibe))
         cache_key = f'activity_search:{city_id}:{search_params_hash}'
 
         full_results = cache.get(cache_key)
         if full_results is None:
-            coords = get_city_coordinates(city.city)
-            if not coords:
-                return Response({'error': 'Failed to get city coordinates'}, status=status.HTTP_502_BAD_GATEWAY)
-
-            lat, lon = coords
+            near_str = f"{city.city}, {city.country}"
             full_results = search_places(
-                lat=lat,
-                lon=lon,
+                near=near_str,
                 query=query,
                 category=category,
                 rate=rate,
@@ -225,7 +208,6 @@ class ActivityListView(APIView):
                 location_type=location_type,
                 vibe=vibe,
             )
-            # cache full ranked list for 1 hour
             cache.set(cache_key, full_results, 3600)
 
         page_size = 10
@@ -244,23 +226,20 @@ class ActivityListView(APIView):
 class ActivityDetailView(APIView):
     """
     GET /api/catalog/activities/<xid>/
-    Returns: { xid, name, description, kinds, image, address, otm_url }
     """
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, pk=None):
-        xid = pk
-        cache_key = f'place_detail:{xid}'
+        fsq_place_id = pk
+        cache_key = f'place_detail:{fsq_place_id}'
         cached = cache.get(cache_key)
         if cached:
             return Response(cached)
 
-        data = get_place_detail(xid)
-        if data is None:
+        result = get_place_detail(fsq_place_id)
+        if result is None:
             return Response({'error': 'Failed to fetch place details'}, status=status.HTTP_502_BAD_GATEWAY)
 
-        result = build_place_detail_response(xid, data)
-        cache.set(cache_key, result, 3600)
         return Response(result)
 
 
