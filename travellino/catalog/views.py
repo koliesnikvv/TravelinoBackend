@@ -17,6 +17,7 @@ from .serializers import (
 from .services import (
     get_place_detail,
     search_places,
+    get_city_insights,
 )
 
 logger = logging.getLogger(__name__)
@@ -192,7 +193,6 @@ class ActivityListView(APIView):
         except City.DoesNotExist:
             return Response({'error': 'City not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        # cache key covers all search params
         search_params_hash = hash((city_id, query, category, rate, price, location_type, vibe))
         cache_key = f'activity_search:{city_id}:{search_params_hash}'
 
@@ -349,3 +349,16 @@ class AccommodationOptionDetailView(generics.RetrieveAPIView):
     serializer_class = AccommodationOptionSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = AccommodationOption.objects.select_related('city').all()
+
+
+class CityInsightsView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request, pk=None):
+        try:
+            city = City.objects.get(pk=pk)
+        except City.DoesNotExist:
+            return Response({'error': 'City not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        insights = get_city_insights(city.city, city.country, str(city.id))
+        return Response(insights)

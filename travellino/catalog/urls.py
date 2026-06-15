@@ -9,6 +9,7 @@ from .views import (
     TransportOptionDetailView,
     AccommodationOptionListView,
     AccommodationOptionDetailView,
+    CityInsightsView,
 )
 
 app_name = 'catalog'
@@ -17,6 +18,7 @@ urlpatterns = [
     path('cities/', CityListView.as_view(), name='city-list'),
     path('cities/recommended/', RecommendedCitiesView.as_view(), name='city-recommended'),
     path('cities/<uuid:pk>/', CityDetailView.as_view(), name='city-detail'),
+    path('cities/<uuid:pk>/insights/', CityInsightsView.as_view(), name='city-insights'),
 
     path('activities/', ActivityListView.as_view(), name='activity-list'),
     path('activities/<str:pk>/', ActivityDetailView.as_view(), name='activity-detail'),

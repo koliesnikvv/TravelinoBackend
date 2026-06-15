@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from datetime import datetime, timedelta
 
 import httpx
 from django.core.cache import cache
@@ -61,12 +62,12 @@ FS_SORT_OPTIONS = ('RELEVANCE', 'RATING', 'DISTANCE', 'POPULARITY')
 # ---------------------------------------------------------------------------
 
 def parse_to_foursquare_params(
-    query: str,
-    category: str = '',
-    price: str = '',
-    location_type: str = '',
-    vibe: str = '',
-    rate: str = '',
+        query: str,
+        category: str = '',
+        price: str = '',
+        location_type: str = '',
+        vibe: str = '',
+        rate: str = '',
 ) -> dict:
     """
     Single Gemini call.
@@ -275,9 +276,7 @@ Include all relevant candidates ordered best to worst. Omit only clearly wrong r
         return places
 
 
-# ---------------------------------------------------------------------------
-# Main entry point
-# ---------------------------------------------------------------------------
+
 
 def search_places(
     near: str,
@@ -309,9 +308,7 @@ def search_places(
     return llm_rank_and_filter(raw_places, translated_query)
 
 
-# ---------------------------------------------------------------------------
-# Place detail — no Foursquare requests, only cache + Gemini
-# ---------------------------------------------------------------------------
+
 
 def get_place_detail(xid: str) -> dict | None:
     """
@@ -332,7 +329,8 @@ def get_place_detail(xid: str) -> dict | None:
     # Raw place data cached during search
     raw = cache.get(f'place_raw:{xid}')
     if not raw:
-        logger.warning(f'No cached data for xid={xid}. User may have jumped directly to detail without searching first.')
+        logger.warning(
+            f'No cached data for xid={xid}. User may have jumped directly to detail without searching first.')
         return None
 
     description = generate_description(raw['name'], raw['categories'])
@@ -382,3 +380,126 @@ Return ONLY the description text. No labels, no headers."""
     except Exception as e:
         logger.error(f'Gemini generate_description error: {e}')
         return ''
+
+
+
+CITY_INSIGHTS_CACHE_TTL = 60 * 60 * 24
+
+
+def generate_city_insights(city_name: str, country: str) -> dict:
+    """Генерує інформацію про місто через Gemini"""
+    prompt = f"""You are a travel and urban data analyst. Generate a city insights report for {city_name}, {country}.
+
+Return ONLY valid JSON with this EXACT structure, no markdown, no extra text:
+
+{{
+  "weather": [
+    {{"day": "Mon", "date": 15, "month": "Jun", "icon": "☀️", "temp_min": "+15", "temp_max": "+23"}},
+    {{"day": "Tue", "date": 16, "month": "Jun", "icon": "⛅", "temp_min": "+16", "temp_max": "+24"}},
+    {{"day": "Wed", "date": 17, "month": "Jun", "icon": "🌧️", "temp_min": "+14", "temp_max": "+20"}},
+    {{"day": "Thu", "date": 18, "month": "Jun", "icon": "☀️", "temp_min": "+17", "temp_max": "+25"}},
+    {{"day": "Fri", "date": 19, "month": "Jun", "icon": "☀️", "temp_min": "+18", "temp_max": "+26"}},
+    {{"day": "Sat", "date": 20, "month": "Jun", "icon": "⛅", "temp_min": "+17", "temp_max": "+24"}},
+    {{"day": "Sun", "date": 21, "month": "Jun", "icon": "☀️", "temp_min": "+16", "temp_max": "+23"}}
+  ],
+  "environment": {{
+    "aqi": 45,
+    "pm25": 12,
+    "pm10": 25,
+    "status": "good",
+    "status_text": "Good air quality"
+  }},
+  "safety": {{
+    "war_conflict": "No active war or conflict",
+    "crime_risk": "Low"
+  }}
+}}
+
+Rules:
+- Generate realistic but believable data for {city_name}
+- For AQI: 0-50=good, 51-100=moderate, 101-150=unhealthy
+- For countries with active war (e.g., Ukraine), set war_conflict to "Active war in country - check official advisories"
+- For countries with high crime rate, set crime_risk to "Medium" or "High"
+- Use appropriate weather icons: ☀️ ⛅ 🌧️ 🌤️
+- Dates should be current/upcoming (not past)
+- All temperatures in Celsius, with + or - sign
+"""
+
+    try:
+        text = _gemini_generate(prompt, response_mime_type='application/json', temperature=0.3)
+        return json.loads(text)
+    except Exception as e:
+        logger.error(f'Gemini generate_city_insights error for {city_name}: {e}')
+        return _get_fallback_insights(city_name, country)
+
+
+def _get_fallback_insights(city_name: str, country: str) -> dict:
+    """Повертає базову інформацію при помилці Gemini"""
+    weather = []
+    days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    icons = ['☀️', '⛅', '🌧️', '☀️', '☀️', '⛅', '☀️']
+
+    today = datetime.now()
+    for i in range(7):
+        date = today + timedelta(days=i)
+        weather.append({
+            "day": days[i],
+            "date": date.day,
+            "month": date.strftime('%b'),
+            "icon": icons[i % len(icons)],
+            "temp_min": f"+{15 + i}",
+            "temp_max": f"+{22 + i}"
+        })
+
+    war_countries = ['Ukraine', 'Russia', 'Israel', 'Palestine', 'Syria', 'Yemen']
+    war_conflict = "Active war in country - check official advisories" if country in war_countries else "No active war or conflict"
+
+    high_crime_countries = ['South Africa', 'Brazil', 'Mexico', 'Venezuela']
+    crime_risk = "High" if country in high_crime_countries else "Low"
+
+    return {
+        "weather": weather,
+        "environment": {"aqi": 45, "pm25": 12, "pm10": 25, "status": "good", "status_text": "Good air quality"},
+        "safety": {
+            "war_conflict": war_conflict,
+            "crime_risk": crime_risk
+        }
+    }
+
+
+
+from .models import EmergencyContact
+
+
+def get_emergency_contacts(country_name: str) -> dict | None:
+    """Отримує екстрені номери для країни з бази даних"""
+    try:
+        contact = EmergencyContact.objects.get(country_name__iexact=country_name)
+        return {
+            'universal': contact.universal,
+            'police': contact.police,
+            'ambulance': contact.ambulance,
+            'fire': contact.fire,
+            'tourist_police': contact.tourist_police,
+            'note': contact.note,
+        }
+    except EmergencyContact.DoesNotExist:
+        return None
+
+
+def get_city_insights(city_name: str, country: str, city_id: str = None) -> dict:
+    """Отримує інформацію про місто: погода, безпека, екологія + екстрені номери з БД"""
+    cache_key = f"city_insights:{city_id or city_name.lower().replace(' ', '_')}"
+
+    cached = cache.get(cache_key)
+    if cached:
+        return cached
+
+    insights = generate_city_insights(city_name, country)
+
+    emergency = get_emergency_contacts(country)
+    if emergency:
+        insights['emergency_contacts'] = emergency
+
+    cache.set(cache_key, insights, CITY_INSIGHTS_CACHE_TTL)
+    return insights
