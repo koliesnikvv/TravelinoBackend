@@ -13,7 +13,6 @@ class TripSerializer(serializers.ModelSerializer):
 
 
 class TransportBookingSerializer(serializers.ModelSerializer):
-    # transport_type for display in TransportSection.js: item.transport_type
     transport_type = serializers.CharField(source='transport_option.transport_type', read_only=True)
 
     class Meta:
@@ -34,7 +33,6 @@ class TransportBookingSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'trip']
 
 
-
 class AccommodationBookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccommodationBooking
@@ -53,12 +51,15 @@ class AccommodationBookingSerializer(serializers.ModelSerializer):
 
 
 class TripActivitySerializer(serializers.ModelSerializer):
-    # SerializerMethodField instead of source='activity.title' to safely handle activity=None
-    # (source='activity.title' would raise AttributeError when activity is None)
+    # Priority: activity.title (catalog FK) > activity_name (saved from OTM) > fallback
     activity_title = serializers.SerializerMethodField()
 
     def get_activity_title(self, obj):
-        return obj.activity.title if obj.activity else 'Custom Activity'
+        if obj.activity:
+            return obj.activity.title
+        if obj.activity_name:
+            return obj.activity_name
+        return 'Activity'
 
     class Meta:
         model = TripActivity
@@ -67,6 +68,7 @@ class TripActivitySerializer(serializers.ModelSerializer):
             'trip',
             'activity',
             'activity_title',
+            'activity_name',
             'activity_details_id',
             'scheduled_date',
             'start_time',
@@ -79,23 +81,16 @@ class TripParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = TripParticipant
         fields = ['id', 'trip', 'user', 'invitee_email', 'access_level', 'status']
-        # trip is set automatically in perform_create via serializer.save(trip=trip)
-        # user is set server-side after the invitee registers
-        # status defaults to Pending and is changed via accept_invite action
         read_only_fields = ['trip', 'user', 'status']
 
 
 class TripDetailSerializer(serializers.ModelSerializer):
-    # city as nested object (contains id, name, country) for future use
     city = CityShortSerializer(read_only=True)
-    # city_name as flat string for TripHeader.js: trip.city_name
     city_name = serializers.CharField(source='city.city', read_only=True)
     transport = TransportBookingSerializer(source='transport_bookings', many=True, read_only=True)
     accommodation = AccommodationBookingSerializer(source='accommodation_bookings', many=True, read_only=True)
     activities = TripActivitySerializer(many=True, read_only=True)
     participants = TripParticipantSerializer(many=True, read_only=True)
-    # current_user_role for TripPage.js: canEdit check
-    # returns 'owner', 'edit', or 'view'
     current_user_role = serializers.SerializerMethodField()
 
     def get_current_user_role(self, obj):
@@ -109,7 +104,7 @@ class TripDetailSerializer(serializers.ModelSerializer):
             status='Accepted'
         ).first()
         if participant:
-            return participant.access_level.lower()  # 'edit' or 'view'
+            return participant.access_level.lower()
         return 'view'
 
     class Meta:
@@ -167,11 +162,14 @@ class AccommodationBookingDetailSerializer(serializers.ModelSerializer):
 
 class TripActivityDetailSerializer(serializers.ModelSerializer):
     activity = ActivitySerializer(read_only=True)
-    # SerializerMethodField instead of source='activity.title' to safely handle activity=None
     activity_title = serializers.SerializerMethodField()
 
     def get_activity_title(self, obj):
-        return obj.activity.title if obj.activity else 'Custom Activity'
+        if obj.activity:
+            return obj.activity.title
+        if obj.activity_name:
+            return obj.activity_name
+        return 'Activity'
 
     class Meta:
         model = TripActivity
@@ -179,6 +177,7 @@ class TripActivityDetailSerializer(serializers.ModelSerializer):
             'id',
             'activity',
             'activity_title',
+            'activity_name',
             'activity_details_id',
             'scheduled_date',
             'start_time',

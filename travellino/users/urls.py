@@ -5,7 +5,7 @@ from .views import (
     RegisterView, LoginView, LogoutView, ProtectedAPIView,
     VerifyEmailView, ForgotPasswordView, ResetPasswordView,
     ProfileView, CustomTokenObtainPairView, ChangePasswordView,
-    UserPreferencesView, PreferencesOptionsView
+    UserPreferencesView, PreferencesOptionsView, UploadPhotoView,
 )
 
 app_name = 'users'
@@ -24,4 +24,5 @@ urlpatterns = [
     path('profile/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('profile/preferences/', UserPreferencesView.as_view(), name='preferences'),
     path('profile/preferences/options/', PreferencesOptionsView.as_view(), name='preferences-options'),
+    path('profile/photo/', UploadPhotoView.as_view(), name='upload-photo'),
 ]

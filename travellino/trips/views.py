@@ -83,12 +83,13 @@ class TripViewSet(viewsets.ModelViewSet):
             for a in trip.activities.select_related('activity').all():
                 ev = Event()
                 ev.add('uid', f'activity-{a.id}@travellino')
-                ev.add('summary', a.activity.title if a.activity else 'Activity')
+                ev.add('summary', a.activity.title if a.activity else (a.activity_name or 'Activity'))
                 # start_time / end_time are TimeField — stored without timezone (local time).
                 # Use naive datetime (no tzinfo) so the calendar displays the time as-is,
                 # without any UTC conversion ("floating" time per RFC 5545).
                 ev.add('dtstart', datetime.combine(a.scheduled_date, a.start_time))
-                ev.add('dtend', datetime.combine(a.scheduled_date, a.end_time))
+                end_date = a.scheduled_date if a.end_time >= a.start_time else a.scheduled_date + timedelta(days=1)
+                ev.add("dtend", datetime.combine(end_date, a.end_time))
                 cal.add_component(ev)
 
         if include_transport:

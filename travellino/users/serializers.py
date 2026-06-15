@@ -83,13 +83,21 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    photo = serializers.SerializerMethodField()
+
     class Meta:
         model = CustomUser
-        fields = ['email', 'first_name', 'last_name', 'phone', 'is_email_verified']
-        read_only_fields = ['is_email_verified', 'email']
+        fields = ['email', 'first_name', 'last_name', 'phone', 'is_email_verified', 'photo']
+        read_only_fields = ['is_email_verified', 'email', 'photo']
+
+    def get_photo(self, obj):
+        try:
+            return obj.profile.photo
+        except Exception:
+            return None
 
 
-#test only
+# test only
 ALLOWED_PREFERENCES = [
     'museums', 'coffee', 'architecture',
     'beaches', 'surfing', 'seafood',
@@ -98,6 +106,7 @@ ALLOWED_PREFERENCES = [
     'history', 'photography',
     'city', 'beach',
 ]
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
