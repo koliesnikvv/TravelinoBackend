@@ -56,13 +56,17 @@ class TripActivity(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='activities')
     activity = models.ForeignKey(Activity, on_delete=models.SET_NULL, null=True, blank=True, related_name='trip_activities')
     activity_details_id = models.CharField(max_length=200, null=True, blank=True)
+    # Stores the display name when activity FK is null (i.e. activity comes from OTM API, not catalog).
+    # Populated on create from the place name returned by the search page.
+    activity_name = models.CharField(max_length=300, null=True, blank=True)
     scheduled_date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
 
     def __str__(self):
-        activity_title = self.activity.title if self.activity else "Custom Activity"
-        return f"{activity_title} {self.scheduled_date}"
+        if self.activity:
+            return f"{self.activity.title} {self.scheduled_date}"
+        return f"{self.activity_name or 'Activity'} {self.scheduled_date}"
 
 
 class AccessLevel(models.TextChoices):

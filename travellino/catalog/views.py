@@ -2,7 +2,7 @@ import logging
 
 from django.core.cache import cache
 from django.db.models import Q
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,9 +14,15 @@ from .serializers import (
     TransportOptionSerializer,
     AccommodationOptionSerializer,
 )
+from .services import (
+    CATEGORY_TO_KINDS,
+    get_city_coordinates,
+    get_place_detail,
+    search_places,
+    build_place_detail_response,
+)
 
 logger = logging.getLogger(__name__)
-
 
 CATEGORY_SCORE_THRESHOLD = 5
 
@@ -26,28 +32,33 @@ VALID_CATEGORY_FIELDS = [
 ]
 
 PREFERENCE_TO_FIELD = {
-    'museums':       'culture',
-    'architecture':  'culture',
-    'history':       'culture',
-    'photography':   'culture',
-    'beaches':       'beaches',
-    'surfing':       'beaches',
-    'beach':         'beaches',
-    'seafood':       'cuisine',
-    'coffee':        'cuisine',
-    'street-food':   'cuisine',
-    'hiking':        'nature',
-    'mountains':     'nature',
-    'nature':        'nature',
-    'shopping':      'urban',
-    'city':          'urban',
-    'nightlife':     'nightlife',
-    'wellness':      'wellness',
-    'asia':          'adventure',
+    'museums':      'culture',
+    'architecture': 'culture',
+    'history':      'culture',
+    'photography':  'culture',
+    'beaches':      'beaches',
+    'surfing':      'beaches',
+    'beach':        'beaches',
+    'seafood':      'cuisine',
+    'coffee':       'cuisine',
+    'street-food':  'cuisine',
+    'hiking':       'nature',
+    'mountains':    'nature',
+    'nature':       'nature',
+    'shopping':     'urban',
+    'city':         'urban',
+    'nightlife':    'nightlife',
+    'wellness':     'wellness',
+    'asia':         'adventure',
 }
 
 VALID_SORT_TRANSPORT = ['base_price', '-base_price']
 VALID_SORT_ACCOMMODATION = ['price_per_night', '-price_per_night', 'rating', '-rating']
+
+VALID_RATE_VALUES = {'1', '2', '3', '1h', '2h', '3h'}
+VALID_PRICE_VALUES = {'budget', 'moderate', 'expensive'}
+VALID_LOCATION_TYPE_VALUES = {'outdoor', 'indoor'}
+VALID_VIBE_VALUES = {'active', 'relaxed'}
 
 
 class CityPagination(PageNumberPagination):
@@ -101,17 +112,15 @@ class CityDetailView(generics.RetrieveAPIView):
 class RecommendedCitiesView(APIView):
     """
     GET /api/catalog/cities/recommended/
-    Повертає top-10 міст на основі уподобань юзера (dot-product).
-    Якщо preferences порожні — повертає міста з найвищим загальним балом.
     """
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         user_id = request.user.id
-        cache_key = f"recommended_cities:{user_id}"
-        cached_data = cache.get(cache_key)
-        if cached_data is not None:
-            return Response(cached_data)
+        cache_key = f'recommended_cities:{user_id}'
+        cached = cache.get(cache_key)
+        if cached is not None:
+            return Response(cached)
 
         try:
             preferences = request.user.profile.preferences or []
@@ -123,9 +132,7 @@ class RecommendedCitiesView(APIView):
         if not preferences:
             scored = sorted(
                 cities,
-                key=lambda c: sum(
-                    getattr(c, field, 0) for field in VALID_CATEGORY_FIELDS
-                ),
+                key=lambda c: sum(getattr(c, f, 0) for f in VALID_CATEGORY_FIELDS),
                 reverse=True,
             )
             top_cities = scored[:10]
@@ -150,60 +157,129 @@ class RecommendedCitiesView(APIView):
                 top_cities = scored[:10]
 
         serializer = CitySerializer(top_cities, many=True)
-        cache.set(cache_key, serializer.data, 3600)  # 1 hour
+        cache.set(cache_key, serializer.data, 3600)
         return Response(serializer.data)
 
 
-class ActivityListView(generics.ListAPIView):
+class ActivityListView(APIView):
     """
     GET /api/catalog/activities/
-    Параметри: city (UUID), category
+    Params:
+        city            UUID, required
+        query           free text
+        category        Culture | Adventure | Nature | Beaches | Nightlife | Cuisine | Wellness | Urban | Seclusion
+        rate            1 | 2 | 3
+        price           budget | moderate | expensive
+        location_type   outdoor | indoor
+        vibe            active | relaxed
+        page            int, default 1, returns 10 results per page
     """
-    serializer_class = ActivitySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get_queryset(self):
-        qs = Activity.objects.select_related('city').all()
+    def get(self, request):
+        city_id = request.query_params.get('city', '').strip()
+        query = request.query_params.get('query', '').strip()
+        category = request.query_params.get('category', '').strip()
+        rate = request.query_params.get('rate', '').strip()
+        price = request.query_params.get('price', '').strip()
+        location_type = request.query_params.get('location_type', '').strip()
+        vibe = request.query_params.get('vibe', '').strip()
 
-        city_id = self.request.query_params.get('city', '').strip()
-        if city_id:
-            qs = qs.filter(city_id=city_id)
+        try:
+            page = max(1, int(request.query_params.get('page', 1)))
+        except ValueError:
+            page = 1
 
-        category = self.request.query_params.get('category', '').strip()
-        if category:
-            qs = qs.filter(category=category)
+        if not city_id:
+            return Response({'error': 'city parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        return qs.order_by('title')
+        if rate and rate not in VALID_RATE_VALUES:
+            return Response(
+                {'error': f'Invalid rate. Valid values: {", ".join(VALID_RATE_VALUES)}'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            city = City.objects.get(pk=city_id)
+        except City.DoesNotExist:
+            return Response({'error': 'City not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # cache key covers all search params — same params = same cached result
+        search_params_hash = hash((city_id, query, category, rate, price, location_type, vibe))
+        cache_key = f'activity_search:{city_id}:{search_params_hash}'
+
+        full_results = cache.get(cache_key)
+        if full_results is None:
+            coords = get_city_coordinates(city.city)
+            if not coords:
+                return Response({'error': 'Failed to get city coordinates'}, status=status.HTTP_502_BAD_GATEWAY)
+
+            lat, lon = coords
+            full_results = search_places(
+                lat=lat,
+                lon=lon,
+                query=query,
+                category=category,
+                rate=rate,
+                price=price,
+                location_type=location_type,
+                vibe=vibe,
+            )
+            # cache full ranked list for 1 hour
+            cache.set(cache_key, full_results, 3600)
+
+        page_size = 10
+        start = (page - 1) * page_size
+        end = start + page_size
+        page_results = full_results[start:end]
+
+        return Response({
+            'results': page_results,
+            'page': page,
+            'total': len(full_results),
+            'has_next': end < len(full_results),
+        })
 
 
-class ActivityDetailView(generics.RetrieveAPIView):
+class ActivityDetailView(APIView):
     """
-    GET /api/catalog/activities/<uuid>/
+    GET /api/catalog/activities/<xid>/
+    Returns: { xid, name, description, kinds, image, address, otm_url }
     """
-    serializer_class = ActivitySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    queryset = Activity.objects.select_related('city').all()
+
+    def get(self, request, pk=None):
+        xid = pk
+        cache_key = f'place_detail:{xid}'
+        cached = cache.get(cache_key)
+        if cached:
+            return Response(cached)
+
+        data = get_place_detail(xid)
+        if data is None:
+            return Response({'error': 'Failed to fetch place details'}, status=status.HTTP_502_BAD_GATEWAY)
+
+        result = build_place_detail_response(xid, data)
+        cache.set(cache_key, result, 3600)
+        return Response(result)
 
 
 class TransportOptionListView(generics.ListAPIView):
     """
     GET /api/catalog/transport/
-    Параметри: from, to, type (Flight/Train/Bus), sort_by (base_price / -base_price)
     """
     serializer_class = TransportOptionSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def list(self, request, *args, **kwargs):
         query_params = tuple(sorted(request.query_params.items()))
-        cache_key = f"transport_list:{hash(query_params)}"
-        cached_data = cache.get(cache_key)
-        if cached_data is not None:
-            return Response(cached_data)
+        cache_key = f'transport_list:{hash(query_params)}'
+        cached = cache.get(cache_key)
+        if cached is not None:
+            return Response(cached)
 
         response = super().list(request, *args, **kwargs)
-        # кешуємо на 10 хвилин (600 секунд)
         cache.set(cache_key, response.data, 600)
-        print(f"REDIS SAVE: saved data for key {cache_key}")
         return response
 
     def get_queryset(self):
@@ -242,22 +318,19 @@ class TransportOptionDetailView(generics.RetrieveAPIView):
 class AccommodationOptionListView(generics.ListAPIView):
     """
     GET /api/catalog/accommodations/
-    Параметри: city (UUID), min_price, max_price, sort_by (price_per_night / rating)
     """
     serializer_class = AccommodationOptionSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def list(self, request, *args, **kwargs):
         query_params = tuple(sorted(request.query_params.items()))
-        cache_key = f"accommodation_list:{hash(query_params)}"
-        cached_data = cache.get(cache_key)
-        if cached_data is not None:
-            return Response(cached_data)
+        cache_key = f'accommodation_list:{hash(query_params)}'
+        cached = cache.get(cache_key)
+        if cached is not None:
+            return Response(cached)
 
         response = super().list(request, *args, **kwargs)
-        cache.set(cache_key, response.data, 600)  # 10 хвилин
-        print(f"REDIS SAVE: saved data for key {cache_key}")
-
+        cache.set(cache_key, response.data, 600)
         return response
 
     def get_queryset(self):

@@ -14,20 +14,16 @@ from .views import (
 app_name = 'catalog'
 
 urlpatterns = [
-    # Cities
     path('cities/', CityListView.as_view(), name='city-list'),
     path('cities/recommended/', RecommendedCitiesView.as_view(), name='city-recommended'),
     path('cities/<uuid:pk>/', CityDetailView.as_view(), name='city-detail'),
 
-    # Activities
     path('activities/', ActivityListView.as_view(), name='activity-list'),
-    path('activities/<uuid:pk>/', ActivityDetailView.as_view(), name='activity-detail'),
+    path('activities/<str:pk>/', ActivityDetailView.as_view(), name='activity-detail'),
 
-    # Transport
     path('transport/', TransportOptionListView.as_view(), name='transport-list'),
     path('transport/<uuid:pk>/', TransportOptionDetailView.as_view(), name='transport-detail'),
 
-    # Accommodation
     path('accommodations/', AccommodationOptionListView.as_view(), name='accommodation-list'),
     path('accommodations/<uuid:pk>/', AccommodationOptionDetailView.as_view(), name='accommodation-detail'),
 ]
