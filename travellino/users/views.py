@@ -1,5 +1,8 @@
+import base64
 import logging
+import os
 
+import httpx
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import redirect
@@ -21,6 +24,9 @@ from users.serializers import ALLOWED_PREFERENCES
 logger = logging.getLogger('users')
 
 User = get_user_model()
+
+IMGBB_API_KEY = os.getenv('IMGBB_API_KEY')
+
 
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -251,3 +257,47 @@ class PreferencesOptionsView(APIView):
 
     def get(self, request):
         return Response({'preferences': ALLOWED_PREFERENCES})
+
+
+class UploadPhotoView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        file = request.FILES.get('photo')
+        if not file:
+            return Response({'error': 'No photo provided.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check file type
+        content_type = file.content_type
+        if content_type not in ('image/jpeg', 'image/png', 'image/webp', 'image/gif'):
+            return Response({'error': 'Unsupported file type. Use JPEG, PNG, WEBP or GIF.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check file size — max 5MB
+        if file.size > 5 * 1024 * 1024:
+            return Response({'error': 'File too large. Max 5MB.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Encode to base64 for imgbb
+        image_data = base64.b64encode(file.read()).decode('utf-8')
+
+        try:
+            resp = httpx.post(
+                'https://api.imgbb.com/1/upload',
+                data={
+                    'key': IMGBB_API_KEY,
+                    'image': image_data,
+                    'name': f'user_{request.user.id}_photo',
+                },
+                timeout=15,
+            )
+            resp.raise_for_status()
+            url = resp.json()['data']['url']
+        except Exception as e:
+            logger.error(f'imgbb upload error for user {request.user.id}: {e}')
+            return Response({'error': 'Failed to upload image. Try again.'}, status=status.HTTP_502_BAD_GATEWAY)
+
+        # Save URL to profile
+        profile = UserProfile.objects.get(user=request.user)
+        profile.photo = url
+        profile.save()
+
+        return Response({'photo': url}, status=status.HTTP_200_OK)
