@@ -383,32 +383,161 @@ Return ONLY the description text. No labels, no headers."""
 
 
 
-CITY_INSIGHTS_CACHE_TTL = 60 * 60 * 24
 
 
-def generate_city_insights(city_name: str, country: str) -> dict:
-    """Генерує інформацію про місто через Gemini"""
-    prompt = f"""You are a travel and urban data analyst. Generate a city insights report for {city_name}, {country}.
+# WMO weather code → emoji icon
+WMO_ICON = {
+    0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+    45: '🌫️', 48: '🌫️',
+    51: '🌦️', 53: '🌦️', 55: '🌧️',
+    61: '🌧️', 63: '🌧️', 65: '🌧️',
+    71: '🌨️', 73: '🌨️', 75: '🌨️',
+    80: '🌦️', 81: '🌧️', 82: '🌧️',
+    95: '⛈️', 96: '⛈️', 99: '⛈️',
+}
 
-Return ONLY valid JSON with this EXACT structure, no markdown, no extra text:
 
+def _geocode_city(city_name: str, country: str) -> tuple[float, float] | None:
+    """
+    Calls Open-Meteo geocoding API to get lat/lon for a city.
+    Returns (latitude, longitude) or None on failure.
+    Free, no API key required.
+    """
+    try:
+        with httpx.Client(timeout=10) as client:
+            resp = client.get(
+                'https://geocoding-api.open-meteo.com/v1/search',
+                params={'name': city_name, 'count': 1, 'language': 'en', 'format': 'json'},
+            )
+            resp.raise_for_status()
+            results = resp.json().get('results', [])
+            if not results:
+                logger.warning(f'Geocoding: no results for {city_name}, {country}')
+                return None
+            r = results[0]
+            return r['latitude'], r['longitude']
+    except Exception as e:
+        logger.error(f'Geocoding error for {city_name}: {e}')
+        return None
+
+
+def _fetch_open_meteo_weather(lat: float, lon: float) -> list[dict]:
+    """
+    Fetches 7-day daily forecast from Open-Meteo.
+    Returns list of 7 dicts matching the existing weather format.
+    Free, no API key required.
+    """
+    try:
+        with httpx.Client(timeout=10) as client:
+            resp = client.get(
+                'https://api.open-meteo.com/v1/forecast',
+                params={
+                    'latitude': lat,
+                    'longitude': lon,
+                    'daily': 'temperature_2m_max,temperature_2m_min,weathercode',
+                    'timezone': 'auto',
+                    'forecast_days': 7,
+                },
+            )
+            resp.raise_for_status()
+            data = resp.json()
+
+        daily = data.get('daily', {})
+        dates = daily.get('time', [])
+        maxs = daily.get('temperature_2m_max', [])
+        mins = daily.get('temperature_2m_min', [])
+        codes = daily.get('weathercode', [])
+
+        weather = []
+        for i in range(min(7, len(dates))):
+            dt = datetime.strptime(dates[i], '%Y-%m-%d')
+            code = int(codes[i]) if codes[i] is not None else 0
+            icon = WMO_ICON.get(code, '⛅')
+            t_min = int(round(mins[i])) if mins[i] is not None else 0
+            t_max = int(round(maxs[i])) if maxs[i] is not None else 0
+            weather.append({
+                'day': dt.strftime('%a'),
+                'date': dt.day,
+                'month': dt.strftime('%b'),
+                'icon': icon,
+                'temp_min': f'{t_min:+d}',
+                'temp_max': f'{t_max:+d}',
+            })
+        return weather
+
+    except Exception as e:
+        logger.error(f'Open-Meteo forecast error: {e}')
+        return []
+
+
+AQI_LEVELS = [
+    (20,  'good',                'Good air quality'),
+    (40,  'good',                'Good air quality'),
+    (60,  'moderate',            'Moderate air quality'),
+    (80,  'moderate',            'Moderate air quality'),
+    (100, 'unhealthy_sensitive', 'Unhealthy for sensitive groups'),
+    (150, 'unhealthy',           'Unhealthy air quality'),
+]
+
+
+def _fetch_open_meteo_air_quality(lat: float, lon: float) -> dict:
+    """
+    Fetches current air quality from Open-Meteo Air Quality API.
+    Returns environment dict with aqi, pm25, pm10, status, status_text.
+    Free, no API key required.
+    """
+    try:
+        with httpx.Client(timeout=10) as client:
+            resp = client.get(
+                'https://air-quality-api.open-meteo.com/v1/air-quality',
+                params={
+                    'latitude': lat,
+                    'longitude': lon,
+                    'current': 'european_aqi,pm2_5,pm10',
+                },
+            )
+            resp.raise_for_status()
+            data = resp.json()
+
+        current = data.get('current', {})
+        aqi = current.get('european_aqi')
+        pm25 = current.get('pm2_5')
+        pm10 = current.get('pm10')
+
+        if aqi is None:
+            return {}
+
+        aqi = int(round(aqi))
+        status, status_text = 'unhealthy', 'Very unhealthy air quality'
+        for threshold, s, t in AQI_LEVELS:
+            if aqi <= threshold:
+                status, status_text = s, t
+                break
+
+        return {
+            'aqi': aqi,
+            'pm25': round(pm25, 1) if pm25 is not None else None,
+            'pm10': round(pm10, 1) if pm10 is not None else None,
+            'status': status,
+            'status_text': status_text,
+        }
+
+    except Exception as e:
+        logger.error(f'Open-Meteo air quality error: {e}')
+        return {}
+
+
+def _generate_safety(city_name: str, country: str) -> dict:
+    """
+    Generates only safety info via Gemini.
+    Environment (AQI) is now handled by Open-Meteo separately.
+    """
+    prompt = f"""You are a travel safety analyst.
+
+Generate a safety report for {city_name}, {country}.
+
+Return ONLY valid JSON, no markdown:
 {{
-  "weather": [
-    {{"day": "Mon", "date": 15, "month": "Jun", "icon": "☀️", "temp_min": "+15", "temp_max": "+23"}},
-    {{"day": "Tue", "date": 16, "month": "Jun", "icon": "⛅", "temp_min": "+16", "temp_max": "+24"}},
-    {{"day": "Wed", "date": 17, "month": "Jun", "icon": "🌧️", "temp_min": "+14", "temp_max": "+20"}},
-    {{"day": "Thu", "date": 18, "month": "Jun", "icon": "☀️", "temp_min": "+17", "temp_max": "+25"}},
-    {{"day": "Fri", "date": 19, "month": "Jun", "icon": "☀️", "temp_min": "+18", "temp_max": "+26"}},
-    {{"day": "Sat", "date": 20, "month": "Jun", "icon": "⛅", "temp_min": "+17", "temp_max": "+24"}},
-    {{"day": "Sun", "date": 21, "month": "Jun", "icon": "☀️", "temp_min": "+16", "temp_max": "+23"}}
-  ],
-  "environment": {{
-    "aqi": 45,
-    "pm25": 12,
-    "pm10": 25,
-    "status": "good",
-    "status_text": "Good air quality"
-  }},
   "safety": {{
     "war_conflict": "No active war or conflict",
     "crime_risk": "Low"
@@ -416,21 +545,71 @@ Return ONLY valid JSON with this EXACT structure, no markdown, no extra text:
 }}
 
 Rules:
-- Generate realistic but believable data for {city_name}
-- For AQI: 0-50=good, 51-100=moderate, 101-150=unhealthy
-- For countries with active war (e.g., Ukraine), set war_conflict to "Active war in country - check official advisories"
-- For countries with high crime rate, set crime_risk to "Medium" or "High"
-- Use appropriate weather icons: ☀️ ⛅ 🌧️ 🌤️
-- Dates should be current/upcoming (not past)
-- All temperatures in Celsius, with + or - sign
+- For countries with active war (e.g. Ukraine, Russia, Sudan, Myanmar), set war_conflict to "Active war in country - check official advisories"
+- crime_risk: Low / Medium / High
 """
-
     try:
-        text = _gemini_generate(prompt, response_mime_type='application/json', temperature=0.3)
+        text = _gemini_generate(prompt, response_mime_type='application/json', temperature=0.2)
         return json.loads(text)
     except Exception as e:
-        logger.error(f'Gemini generate_city_insights error for {city_name}: {e}')
-        return _get_fallback_insights(city_name, country)
+        logger.error(f'Gemini safety error for {city_name}: {e}')
+        return {'safety': {'war_conflict': 'No data available', 'crime_risk': 'Unknown'}}
+
+
+WEATHER_CACHE_TTL = 60 * 60 * 3       # 3h — real forecast
+STATIC_CACHE_TTL = 60 * 60 * 24 * 30  # 30 days — safety + environment don't change
+
+
+def generate_city_insights(city_name: str, country: str, city_id: str = '') -> dict:
+    """
+    Збирає insights про місто:
+    - погода: реальна з Open-Meteo, cache 3h
+    - якість повітря: реальна з Open-Meteo Air Quality API, cache 3h
+    - безпека: Gemini, cache 30 днів
+    """
+    slug = city_id or city_name.lower().replace(' ', '_')
+
+    # Coords needed for weather + air quality
+    coords_key = f'city_coords:{slug}'
+    coords = cache.get(coords_key)
+    if coords is None:
+        coords = _geocode_city(city_name, country)
+        cache.set(coords_key, coords, 60 * 60 * 24 * 30)  # coords don't change
+
+    # Weather — short cache
+    weather_key = f'city_weather:{slug}'
+    weather = cache.get(weather_key)
+    if weather is None:
+        if coords:
+            weather = _fetch_open_meteo_weather(*coords)
+        if not weather:
+            logger.warning(f'Open-Meteo weather failed for {city_name}, using fallback')
+            weather = _get_fallback_insights(city_name, country)['weather']
+        cache.set(weather_key, weather, WEATHER_CACHE_TTL)
+
+    # Air quality — short cache
+    aqi_key = f'city_aqi:{slug}'
+    environment = cache.get(aqi_key)
+    if environment is None:
+        if coords:
+            environment = _fetch_open_meteo_air_quality(*coords)
+        if not environment:
+            logger.warning(f'Open-Meteo AQI failed for {city_name}, using fallback')
+            environment = {'aqi': None, 'pm25': None, 'pm10': None, 'status': 'unknown', 'status_text': 'No data'}
+        cache.set(aqi_key, environment, WEATHER_CACHE_TTL)
+
+    # Safety — long cache
+    safety_key = f'city_safety:{slug}'
+    safety_data = cache.get(safety_key)
+    if safety_data is None:
+        safety_data = _generate_safety(city_name, country)
+        cache.set(safety_key, safety_data, STATIC_CACHE_TTL)
+
+    return {
+        'weather': weather,
+        'environment': environment,
+        'safety': safety_data.get('safety', {}),
+    }
 
 
 def _get_fallback_insights(city_name: str, country: str) -> dict:
@@ -489,17 +668,10 @@ def get_emergency_contacts(country_name: str) -> dict | None:
 
 def get_city_insights(city_name: str, country: str, city_id: str = None) -> dict:
     """Отримує інформацію про місто: погода, безпека, екологія + екстрені номери з БД"""
-    cache_key = f"city_insights:{city_id or city_name.lower().replace(' ', '_')}"
-
-    cached = cache.get(cache_key)
-    if cached:
-        return cached
-
-    insights = generate_city_insights(city_name, country)
+    insights = generate_city_insights(city_name, country, city_id or '')
 
     emergency = get_emergency_contacts(country)
     if emergency:
         insights['emergency_contacts'] = emergency
 
-    cache.set(cache_key, insights, CITY_INSIGHTS_CACHE_TTL)
     return insights
