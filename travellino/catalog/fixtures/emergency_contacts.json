@@ -323,5 +323,1032 @@
       "tourist_police": "800 4438",
       "note": "112 works from mobile phones. Tourist police: 800 4438 (English)"
     }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 26,
+    "fields": {
+      "country_name": "Austria",
+      "universal": "112",
+      "police": "133",
+      "ambulance": "144",
+      "fire": "122",
+      "tourist_police": "112",
+      "note": "112 for all services, national numbers also work"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 27,
+    "fields": {
+      "country_name": "Belgium",
+      "universal": "112",
+      "police": "101",
+      "ambulance": "100",
+      "fire": "100",
+      "tourist_police": "112",
+      "note": "112 for all services, police: 101"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 28,
+    "fields": {
+      "country_name": "Switzerland",
+      "universal": "112",
+      "police": "117",
+      "ambulance": "144",
+      "fire": "118",
+      "tourist_police": "112",
+      "note": "112 for all services from mobile phones"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 29,
+    "fields": {
+      "country_name": "Sweden",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "SOS Alarm 112 - single rescue service"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 30,
+    "fields": {
+      "country_name": "Norway",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "113",
+      "fire": "110",
+      "tourist_police": "112",
+      "note": "Police: 112, Ambulance: 113, Fire: 110"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 31,
+    "fields": {
+      "country_name": "Denmark",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 32,
+    "fields": {
+      "country_name": "Finland",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112, '112 Suomi' app for geolocation"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 33,
+    "fields": {
+      "country_name": "Iceland",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112 for all services, '112 Iceland' app available"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 34,
+    "fields": {
+      "country_name": "Ireland",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112 for all emergency services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 35,
+    "fields": {
+      "country_name": "Czech Republic",
+      "universal": "112",
+      "police": "158",
+      "ambulance": "155",
+      "fire": "150",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 36,
+    "fields": {
+      "country_name": "Hungary",
+      "universal": "112",
+      "police": "107",
+      "ambulance": "104",
+      "fire": "105",
+      "tourist_police": "112",
+      "note": "112 - single emergency number"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 37,
+    "fields": {
+      "country_name": "Croatia",
+      "universal": "112",
+      "police": "192",
+      "ambulance": "194",
+      "fire": "193",
+      "tourist_police": "112",
+      "note": "112 for all services, national numbers also work"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 38,
+    "fields": {
+      "country_name": "Slovenia",
+      "universal": "112",
+      "police": "113",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 39,
+    "fields": {
+      "country_name": "Lithuania",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 40,
+    "fields": {
+      "country_name": "Latvia",
+      "universal": "112",
+      "police": "110",
+      "ambulance": "113",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "112 for all services, police: 110"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 41,
+    "fields": {
+      "country_name": "Estonia",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 42,
+    "fields": {
+      "country_name": "Romania",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 43,
+    "fields": {
+      "country_name": "Bulgaria",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 44,
+    "fields": {
+      "country_name": "Serbia",
+      "universal": "112",
+      "police": "192",
+      "ambulance": "194",
+      "fire": "193",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 45,
+    "fields": {
+      "country_name": "Bosnia and Herzegovina",
+      "universal": "112",
+      "police": "122",
+      "ambulance": "124",
+      "fire": "123",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 46,
+    "fields": {
+      "country_name": "Albania",
+      "universal": "112",
+      "police": "129",
+      "ambulance": "127",
+      "fire": "128",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 47,
+    "fields": {
+      "country_name": "North Macedonia",
+      "universal": "112",
+      "police": "192",
+      "ambulance": "194",
+      "fire": "193",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 48,
+    "fields": {
+      "country_name": "Montenegro",
+      "universal": "112",
+      "police": "122",
+      "ambulance": "124",
+      "fire": "123",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 49,
+    "fields": {
+      "country_name": "Cyprus",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 50,
+    "fields": {
+      "country_name": "Luxembourg",
+      "universal": "112",
+      "police": "113",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "112 for all services, police: 113"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 51,
+    "fields": {
+      "country_name": "Malta",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "Single number 112"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 52,
+    "fields": {
+      "country_name": "Monaco",
+      "universal": "112",
+      "police": "17",
+      "ambulance": "15",
+      "fire": "18",
+      "tourist_police": "112",
+      "note": "Same as France"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 53,
+    "fields": {
+      "country_name": "San Marino",
+      "universal": "112",
+      "police": "113",
+      "ambulance": "118",
+      "fire": "115",
+      "tourist_police": "112",
+      "note": "Same as Italy"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 54,
+    "fields": {
+      "country_name": "Vatican City",
+      "universal": "112",
+      "police": "113",
+      "ambulance": "118",
+      "fire": "115",
+      "tourist_police": "112",
+      "note": "Same as Italy (via Rome)"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 55,
+    "fields": {
+      "country_name": "Mexico",
+      "universal": "911",
+      "police": "911",
+      "ambulance": "911",
+      "fire": "911",
+      "tourist_police": "078",
+      "note": "911 for all services, tourist assistance: 078"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 56,
+    "fields": {
+      "country_name": "Costa Rica",
+      "universal": "911",
+      "police": "911",
+      "ambulance": "911",
+      "fire": "911",
+      "tourist_police": "911",
+      "note": "Single number 911"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 57,
+    "fields": {
+      "country_name": "Panama",
+      "universal": "911",
+      "police": "104",
+      "ambulance": "911",
+      "fire": "103",
+      "tourist_police": "911",
+      "note": "911 works for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 58,
+    "fields": {
+      "country_name": "Jamaica",
+      "universal": "119",
+      "police": "119",
+      "ambulance": "110",
+      "fire": "110",
+      "tourist_police": "119",
+      "note": "Police: 119, Ambulance/Fire: 110"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 59,
+    "fields": {
+      "country_name": "Cuba",
+      "universal": "106",
+      "police": "106",
+      "ambulance": "104",
+      "fire": "105",
+      "tourist_police": "106",
+      "note": "Police: 106, Ambulance: 104, Fire: 105"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 60,
+    "fields": {
+      "country_name": "Dominican Republic",
+      "universal": "911",
+      "police": "911",
+      "ambulance": "911",
+      "fire": "911",
+      "tourist_police": "911",
+      "note": "911 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 61,
+    "fields": {
+      "country_name": "Bahamas",
+      "universal": "919",
+      "police": "919",
+      "ambulance": "919",
+      "fire": "919",
+      "tourist_police": "919",
+      "note": "919 for all emergency services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 62,
+    "fields": {
+      "country_name": "Barbados",
+      "universal": "211",
+      "police": "211",
+      "ambulance": "511",
+      "fire": "311",
+      "tourist_police": "211",
+      "note": "Police: 211, Ambulance: 511, Fire: 311"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 63,
+    "fields": {
+      "country_name": "Trinidad and Tobago",
+      "universal": "911",
+      "police": "999",
+      "ambulance": "811",
+      "fire": "990",
+      "tourist_police": "999",
+      "note": "Police: 999, Fire: 990, Ambulance: 811"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 64,
+    "fields": {
+      "country_name": "South Korea",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "119",
+      "fire": "119",
+      "tourist_police": "1330",
+      "note": "Police: 112, Fire/Ambulance: 119, Tourist: 1330"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 65,
+    "fields": {
+      "country_name": "Vietnam",
+      "universal": "113",
+      "police": "113",
+      "ambulance": "115",
+      "fire": "114",
+      "tourist_police": "113",
+      "note": "Police: 113, Ambulance: 115, Fire: 114"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 66,
+    "fields": {
+      "country_name": "Malaysia",
+      "universal": "999",
+      "police": "999",
+      "ambulance": "999",
+      "fire": "999",
+      "tourist_police": "999",
+      "note": "999 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 67,
+    "fields": {
+      "country_name": "Singapore",
+      "universal": "999",
+      "police": "999",
+      "ambulance": "995",
+      "fire": "995",
+      "tourist_police": "999",
+      "note": "Police: 999, Ambulance/Fire: 995"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 68,
+    "fields": {
+      "country_name": "Philippines",
+      "universal": "911",
+      "police": "117",
+      "ambulance": "911",
+      "fire": "911",
+      "tourist_police": "117",
+      "note": "911 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 69,
+    "fields": {
+      "country_name": "Sri Lanka",
+      "universal": "119",
+      "police": "119",
+      "ambulance": "110",
+      "fire": "110",
+      "tourist_police": "119",
+      "note": "Police: 119, Ambulance/Fire: 110"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 70,
+    "fields": {
+      "country_name": "Nepal",
+      "universal": "100",
+      "police": "100",
+      "ambulance": "102",
+      "fire": "101",
+      "tourist_police": "100",
+      "note": "Police: 100, Ambulance: 102, Fire: 101"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 71,
+    "fields": {
+      "country_name": "Bangladesh",
+      "universal": "999",
+      "police": "999",
+      "ambulance": "999",
+      "fire": "999",
+      "tourist_police": "999",
+      "note": "999 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 72,
+    "fields": {
+      "country_name": "Pakistan",
+      "universal": "15",
+      "police": "15",
+      "ambulance": "115",
+      "fire": "16",
+      "tourist_police": "15",
+      "note": "Police: 15, Ambulance: 115, Fire: 16"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 73,
+    "fields": {
+      "country_name": "Cambodia",
+      "universal": "117",
+      "police": "117",
+      "ambulance": "119",
+      "fire": "118",
+      "tourist_police": "117",
+      "note": "Police: 117, Ambulance: 119, Fire: 118"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 74,
+    "fields": {
+      "country_name": "Myanmar",
+      "universal": "199",
+      "police": "199",
+      "ambulance": "192",
+      "fire": "191",
+      "tourist_police": "199",
+      "note": "Police: 199, Ambulance: 192, Fire: 191"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 75,
+    "fields": {
+      "country_name": "Mongolia",
+      "universal": "102",
+      "police": "102",
+      "ambulance": "103",
+      "fire": "101",
+      "tourist_police": "102",
+      "note": "Police: 102, Ambulance: 103, Fire: 101"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 76,
+    "fields": {
+      "country_name": "Uzbekistan",
+      "universal": "112",
+      "police": "102",
+      "ambulance": "103",
+      "fire": "101",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 77,
+    "fields": {
+      "country_name": "Kazakhstan",
+      "universal": "112",
+      "police": "102",
+      "ambulance": "103",
+      "fire": "101",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 78,
+    "fields": {
+      "country_name": "Georgia",
+      "universal": "112",
+      "police": "111",
+      "ambulance": "113",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 79,
+    "fields": {
+      "country_name": "Armenia",
+      "universal": "112",
+      "police": "102",
+      "ambulance": "103",
+      "fire": "101",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 80,
+    "fields": {
+      "country_name": "Azerbaijan",
+      "universal": "112",
+      "police": "102",
+      "ambulance": "103",
+      "fire": "101",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 81,
+    "fields": {
+      "country_name": "Israel",
+      "universal": "100",
+      "police": "100",
+      "ambulance": "101",
+      "fire": "102",
+      "tourist_police": "100",
+      "note": "Police: 100, Ambulance: 101, Fire: 102"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 82,
+    "fields": {
+      "country_name": "Jordan",
+      "universal": "911",
+      "police": "911",
+      "ambulance": "911",
+      "fire": "911",
+      "tourist_police": "911",
+      "note": "911 for all services"
+    }
+  },
+    {
+    "model": "catalog.emergencycontact",
+    "pk": 83,
+    "fields": {
+      "country_name": "Fiji",
+      "universal": "911",
+      "police": "917",
+      "ambulance": "911",
+      "fire": "910",
+      "tourist_police": "911",
+      "note": "911 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 84,
+    "fields": {
+      "country_name": "Papua New Guinea",
+      "universal": "110",
+      "police": "110",
+      "ambulance": "111",
+      "fire": "112",
+      "tourist_police": "110",
+      "note": "Police: 110, Ambulance: 111, Fire: 112"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 85,
+    "fields": {
+      "country_name": "Morocco",
+      "universal": "19",
+      "police": "19",
+      "ambulance": "15",
+      "fire": "15",
+      "tourist_police": "112",
+      "note": "Police: 19, Ambulance/Fire: 15, Tourist: 112"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 86,
+    "fields": {
+      "country_name": "Kenya",
+      "universal": "112",
+      "police": "999",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "999",
+      "note": "Police: 999, 112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 87,
+    "fields": {
+      "country_name": "Tanzania",
+      "universal": "112",
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 88,
+    "fields": {
+      "country_name": "Nigeria",
+      "universal": "112",
+      "police": "199",
+      "ambulance": "112",
+      "fire": "112",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 89,
+    "fields": {
+      "country_name": "Ghana",
+      "universal": "112",
+      "police": "191",
+      "ambulance": "193",
+      "fire": "192",
+      "tourist_police": "112",
+      "note": "112 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 90,
+    "fields": {
+      "country_name": "Ethiopia",
+      "universal": "911",
+      "police": "911",
+      "ambulance": "907",
+      "fire": "939",
+      "tourist_police": "911",
+      "note": "911 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 91,
+    "fields": {
+      "country_name": "Senegal",
+      "universal": "17",
+      "police": "17",
+      "ambulance": "15",
+      "fire": "18",
+      "tourist_police": "17",
+      "note": "Police: 17, Ambulance: 15, Fire: 18"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 92,
+    "fields": {
+      "country_name": "Madagascar",
+      "universal": "117",
+      "police": "117",
+      "ambulance": "124",
+      "fire": "118",
+      "tourist_police": "117",
+      "note": "Police: 117, Ambulance: 124, Fire: 118"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 93,
+    "fields": {
+      "country_name": "Zimbabwe",
+      "universal": "999",
+      "police": "999",
+      "ambulance": "994",
+      "fire": "993",
+      "tourist_police": "999",
+      "note": "Police: 999, Ambulance: 994, Fire: 993"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 94,
+    "fields": {
+      "country_name": "Namibia",
+      "universal": "10111",
+      "police": "10111",
+      "ambulance": "211111",
+      "fire": "211111",
+      "tourist_police": "10111",
+      "note": "Police: 10111, Ambulance/Fire: 211111"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 95,
+    "fields": {
+      "country_name": "Chile",
+      "universal": "133",
+      "police": "133",
+      "ambulance": "131",
+      "fire": "132",
+      "tourist_police": "133",
+      "note": "Police: 133, Ambulance: 131, Fire: 132"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 96,
+    "fields": {
+      "country_name": "Peru",
+      "universal": "911",
+      "police": "105",
+      "ambulance": "117",
+      "fire": "116",
+      "tourist_police": "911",
+      "note": "911 for all services, tourist police: +51 1 2243222"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 97,
+    "fields": {
+      "country_name": "Colombia",
+      "universal": "123",
+      "police": "123",
+      "ambulance": "123",
+      "fire": "123",
+      "tourist_police": "122",
+      "note": "123 for all services, tourist police: 122"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 98,
+    "fields": {
+      "country_name": "Venezuela",
+      "universal": "911",
+      "police": "171",
+      "ambulance": "911",
+      "fire": "911",
+      "tourist_police": "171",
+      "note": "911 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 99,
+    "fields": {
+      "country_name": "Ecuador",
+      "universal": "911",
+      "police": "101",
+      "ambulance": "911",
+      "fire": "911",
+      "tourist_police": "911",
+      "note": "911 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 100,
+    "fields": {
+      "country_name": "Bolivia",
+      "universal": "911",
+      "police": "110",
+      "ambulance": "118",
+      "fire": "119",
+      "tourist_police": "911",
+      "note": "911 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 101,
+    "fields": {
+      "country_name": "Paraguay",
+      "universal": "911",
+      "police": "911",
+      "ambulance": "911",
+      "fire": "911",
+      "tourist_police": "911",
+      "note": "911 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 102,
+    "fields": {
+      "country_name": "Uruguay",
+      "universal": "911",
+      "police": "911",
+      "ambulance": "911",
+      "fire": "911",
+      "tourist_police": "911",
+      "note": "911 for all services"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 103,
+    "fields": {
+      "country_name": "Guyana",
+      "universal": "911",
+      "police": "911",
+      "ambulance": "912",
+      "fire": "912",
+      "tourist_police": "911",
+      "note": "Police: 911, Ambulance/Fire: 912"
+    }
+  },
+  {
+    "model": "catalog.emergencycontact",
+    "pk": 104,
+    "fields": {
+      "country_name": "Suriname",
+      "universal": "115",
+      "police": "115",
+      "ambulance": "113",
+      "fire": "110",
+      "tourist_police": "115",
+      "note": "Police: 115, Ambulance: 113, Fire: 110"
+    }
   }
 ]
